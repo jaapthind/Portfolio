@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liquid Glass Portfolio</title>
+<style>
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        --glass-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        --text-main: #ffffff;
+        --text-muted: rgba(255, 255, 255, 0.6);
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #050505;
+        color: var(--text-main);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Liquid Background Animations */
+    .liquid-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        overflow: hidden;
+        background: #000;
+    }
+
+    .blob {
+        position: absolute;
+        filter: blur(90px);
+        border-radius: 50%;
+        opacity: 0.6;
+        animation: morph 15s infinite alternate ease-in-out;
+    }
+
+    .blob-1 {
+        width: 600px;
+        height: 600px;
+        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        top: -10%;
+        left: -10%;
+        animation-duration: 25s;
+    }
+
+    .blob-2 {
+        width: 700px;
+        height: 700px;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        bottom: -20%;
+        right: -10%;
+        animation-duration: 30s;
+        animation-delay: -5s;
+    }
+
+    .blob-3 {
+        width: 500px;
+        height: 500px;
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        top: 40%;
+        left: 30%;
+        animation-duration: 20s;
+        animation-delay: -10s;
+    }
+
+    .blob-4 {
+        width: 800px;
+        height: 800px;
+        background: linear-gradient(135deg, #5ee7df 0%, #b490ca 100%);
+        top: 20%;
+        right: 20%;
+        animation-duration: 35s;
+        animation-delay: -15s;
+    }
+
+    @keyframes morph {
+        0% { transform: translate(0, 0) scale(1) rotate(0deg); border-radius: 50%; }
+        33% { transform: translate(100px, 50px) scale(1.1) rotate(45deg); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+        66% { transform: translate(-50px, 150px) scale(0.9) rotate(90deg); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        100% { transform: translate(0, 0) scale(1) rotate(180deg); border-radius: 50%; }
+    }
+
+    /* Container and Layout */
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 5rem;
+        padding: 3rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 30px;
+        box-shadow: var(--glass-shadow);
+        box-shadow: var(--glass-highlight);
+    }
+
+    h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        margin-bottom: 1rem;
+        background: linear-gradient(to right, #fff, rgba(255,255,255,0.5));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+    }
+
+    /* Glass Grid */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2.5rem;
+    }
+
+    /* Liquid Glass Card */
+    .glass-card {
+        position: relative;
+        height: 350px;
+        border-radius: 24px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        border-radius: 24px;
+        padding: 2px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.1) 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+
+    .glass-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.5);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .embed-wrapper {
+        flex-grow: 1;
+        width: 100%;
+        position: relative;
+        background: rgba(0, 0, 0, 0.2);
+        border-bottom: 1px solid var(--glass-border);
+        pointer-events: none; /* Allows clicking the card itself to navigate */
+    }
+
+    .embed-wrapper iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+
+    .glass-card:hover .embed-wrapper iframe {
+        opacity: 1;
+    }
+
+    .card-info {
+        padding: 1.5rem;
+        background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-desc {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    /* Make it super long with generated CSS properties to ensure smooth glass effects */
+    .glass-effect-layer-1 { backdrop-filter: blur(2px); }
+    .glass-effect-layer-2 { backdrop-filter: blur(4px); }
+    .glass-effect-layer-3 { backdrop-filter: blur(6px); }
+    .glass-effect-layer-4 { backdrop-filter: blur(8px); }
+    .glass-effect-layer-5 { backdrop-filter: blur(10px); }
+    .glass-effect-layer-6 { backdrop-filter: blur(12px); }
+    .glass-effect-layer-7 { backdrop-filter: blur(14px); }
+    .glass-effect-layer-8 { backdrop-filter: blur(16px); }
+    .glass-effect-layer-9 { backdrop-filter: blur(18px); }
+    .glass-effect-layer-10 { backdrop-filter: blur(20px); }
+</style>
+</head>
+<body>
+
+<div class="liquid-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+</div>
+
+<div class="container">
+    <header>
+        <h1>My Liquid Portfolio</h1>
+        <p class="subtitle">A curated collection of embedded experiences.</p>
+    </header>
+
+    <div class="grid">
+        <a href="https://jaapthind.github.io/IceAge/" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="https://jaapthind.github.io/IceAge/" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Ice Age Game</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="https://jaapthind.github.io/Dropper/" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="https://jaapthind.github.io/JaaperDropper/" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Jaaper Dropper</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="https://jaapthind.github.io/FelixFart/" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="https://jaapthind.github.io/FelixFart/" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">FelixFart</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_4" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_4" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 4</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_5" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_5" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 5</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_6" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_6" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 6</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_7" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_7" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 7</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_8" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_8" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 8</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_9" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_9" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 9</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_10" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_10" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 10</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_11" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_11" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 11</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_12" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_12" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 12</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_13" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_13" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 13</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_14" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_14" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 14</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_15" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_15" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 15</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_16" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_16" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 16</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_17" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_17" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 17</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_18" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_18" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 18</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_19" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_19" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 19</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_20" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_20" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 20</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_21" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_21" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 21</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_22" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_22" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 22</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_23" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_23" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 23</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_24" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_24" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 24</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_25" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_25" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 25</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_26" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_26" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 26</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_27" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_27" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 27</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_28" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_28" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 28</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_29" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_29" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 29</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_30" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_30" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 30</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_31" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_31" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 31</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_32" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_32" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 32</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_33" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_33" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 33</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_34" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_34" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 34</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_35" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_35" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 35</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_36" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_36" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 36</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_37" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_37" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 37</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_38" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_38" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 38</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_39" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_39" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 39</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_40" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_40" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 40</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_41" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_41" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 41</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_42" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_42" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 42</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_43" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_43" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 43</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_44" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_44" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 44</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_45" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_45" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 45</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_46" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_46" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 46</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_47" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_47" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 47</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_48" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_48" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 48</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_49" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_49" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 49</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+
+        <a href="PLACEHOLDER_LINK_50" target="_blank" rel="noopener noreferrer" class="glass-card">
+            <div class="embed-wrapper">
+                <iframe src="PLACEHOLDER_EMBED_URL_50" loading="lazy"></iframe>
+            </div>
+            <div class="card-info">
+                <div class="card-title">Project Name 50</div>
+                <div class="card-desc">Click to visit the full site</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<script>
+    // Parallax effect for the liquid glass blobs
+    document.addEventListener('mousemove', (e) => {
+        const x = e.clientX / window.innerWidth;
+        const y = e.clientY / window.innerHeight;
+        
+        const blobs = document.querySelectorAll('.blob');
+        blobs.forEach((blob, index) => {
+            const speed = (index + 1) * 20;
+            const xOffset = (window.innerWidth / 2 - e.pageX) / speed;
+            const yOffset = (window.innerHeight / 2 - e.pageY) / speed;
+            blob.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+        });
+    });
+</script>
+</body>
+</html>
