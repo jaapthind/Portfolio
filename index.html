@@ -3,904 +3,1291 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="description" content="Ultimate Liquid Protocol - OS V6">
+<meta name="description" content="Jaap Portfolio - Dual OS Web Desktop">
 <meta name="theme-color" content="#000000">
-<title>ULP // CORE SYSTEM V6</title>
+<title>Jaap OS</title>
 <style>
     /* ==========================================================================
-       [ FEATURE 01 ] MASSIVE CSS VARIABLE ARCHITECTURE
-       [ FEATURE 02 ] DYNAMIC THEME ENGINE READY
+       [ CORE VARIABLES ]
        ========================================================================== */
     :root {
-        --bg-core: #010203;
-        --bg-panel: rgba(10, 12, 16, 0.65);
-        --bg-glass: rgba(255, 255, 255, 0.02);
-        --border-glass: rgba(0, 255, 204, 0.15);
-        --border-highlight: rgba(0, 255, 204, 0.5);
+        --theme-accent: #007aff;
+        --theme-bg: #ffffff;
+        --theme-text: #000000;
+        --theme-text-muted: #666666;
+        --theme-panel: rgba(255, 255, 255, 0.6);
+        --theme-panel-border: rgba(255, 255, 255, 0.4);
+        --theme-window-bg: rgba(255, 255, 255, 0.95);
+        --theme-window-border: rgba(0, 0, 0, 0.2);
+        --theme-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        --theme-hover: rgba(0, 0, 0, 0.05);
+        --theme-active: rgba(0, 0, 0, 0.1);
+        --theme-selection: rgba(0, 122, 255, 0.3);
         
-        --color-primary: #00ffcc;
-        --color-secondary: #0088ff;
-        --color-alert: #ff0055;
-        --color-warn: #ffaa00;
-        --color-success: #00ff66;
-        --color-text-main: #f0f4f8;
-        --color-text-muted: #6272a4;
+        --color-danger: #ff3b30;
+        --color-warning: #ffcc00;
+        --color-success: #34c759;
         
-        --glow-primary: 0 0 20px rgba(0, 255, 204, 0.4);
-        --glow-alert: 0 0 20px rgba(255, 0, 85, 0.4);
+        --font-mac: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+        --font-win: "Segoe UI", "Segoe UI Variable", "Helvetica Neue", sans-serif;
         
-        --font-ui: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        --font-mono: 'Fira Code', 'Consolas', monospace;
-        
-        --z-bg: -100;
-        --z-grid: 10;
-        --z-ui: 100;
-        --z-modal: 1000;
-        --z-cursor: 9999;
-        
-        --radius-sm: 4px;
-        --radius-md: 12px;
-        --radius-lg: 24px;
-        --radius-pill: 999px;
-        
-        --transition-snap: 0.1s cubic-bezier(0.2, 0.8, 0.2, 1);
-        --transition-smooth: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-        --transition-spring: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        --z-desktop: 10;
+        --z-icons: 20;
+        --z-windows: 100;
+        --z-taskbar: 1000;
+        --z-menus: 2000;
+        --z-modals: 3000;
+        --z-boot: 10000;
+        --z-cursor: 99999;
+
+        --mac-menu-height: 24px;
+        --mac-dock-height: 60px;
+        --win-taskbar-height: 48px;
+
+        --wallpaper-bg: radial-gradient(circle at 50% 50%, #1a2a6c, #112 100%);
     }
 
     /* ==========================================================================
-       [ FEATURE 03 ] THEME MUTATIONS (MATRIX, CYBERPUNK, RETRO, VOID, NEON, ARCTIC)
+       [ DYNAMIC THEMES ]
        ========================================================================== */
-    [data-theme="matrix"] {
-        --bg-core: #000500; --bg-panel: rgba(0, 20, 0, 0.8);
-        --color-primary: #00ff00; --color-secondary: #008800;
-        --border-glass: rgba(0, 255, 0, 0.2); --glow-primary: 0 0 25px rgba(0, 255, 0, 0.5);
-    }
-    [data-theme="cyberpunk"] {
-        --bg-core: #0d0221; --bg-panel: rgba(20, 0, 40, 0.8);
-        --color-primary: #fcee0a; --color-secondary: #ff003c;
-        --border-glass: rgba(252, 238, 10, 0.2); --glow-primary: 0 0 20px rgba(252, 238, 10, 0.4);
-    }
-    [data-theme="retro"] {
-        --bg-core: #2b2b2b; --bg-panel: #c0c0c0;
-        --color-primary: #000080; --color-secondary: #808080; --color-text-main: #000;
-        --border-glass: #fff; --glow-primary: none;
-    }
-    [data-theme="void"] {
-        --bg-core: #000; --bg-panel: #000; --border-glass: #111;
-        --color-primary: #fff; --color-text-main: #fff; --color-text-muted: #333;
-        --glow-primary: 0 0 10px rgba(255,255,255,0.1);
-    }
-    [data-theme="neon"] {
-        --bg-core: #110022; --bg-panel: rgba(30, 0, 50, 0.6);
-        --color-primary: #ff00ff; --color-secondary: #00ffff;
-        --border-glass: rgba(255, 0, 255, 0.3); --glow-primary: 0 0 30px rgba(255, 0, 255, 0.6);
-    }
-    [data-theme="arctic"] {
-        --bg-core: #e0fbfc; --bg-panel: rgba(255, 255, 255, 0.8);
-        --color-primary: #293241; --color-secondary: #3d5a80;
-        --color-text-main: #293241; --color-text-muted: #98c1d9;
-        --border-glass: rgba(41, 50, 65, 0.1); --glow-primary: 0 5px 15px rgba(0,0,0,0.1);
+    body.dark-mode {
+        --theme-bg: #1e1e1e;
+        --theme-text: #ffffff;
+        --theme-text-muted: #aaaaaa;
+        --theme-panel: rgba(30, 30, 30, 0.65);
+        --theme-panel-border: rgba(255, 255, 255, 0.1);
+        --theme-window-bg: rgba(30, 30, 30, 0.95);
+        --theme-window-border: rgba(0, 0, 0, 0.8);
+        --theme-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        --theme-hover: rgba(255, 255, 255, 0.1);
+        --theme-active: rgba(255, 255, 255, 0.15);
     }
 
-    /* ==========================================================================
-       [ FEATURE 04 ] CSS RESET & HARDWARE ACCELERATION BASE
-       ========================================================================== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
-    html { font-size: 16px; scroll-behavior: smooth; }
-    body {
-        background-color: var(--bg-core); color: var(--color-text-main);
-        font-family: var(--font-ui); min-height: 100vh; overflow: hidden;
-        user-select: none; -webkit-user-select: none;
-    }
-    ::selection { background: var(--color-primary); color: var(--bg-core); }
+    body[data-color="matrix"] { --theme-accent: #00ff00; --wallpaper-bg: linear-gradient(to bottom, #001100, #000000); }
+    body[data-color="cyberpunk"] { --theme-accent: #fcee0a; --wallpaper-bg: radial-gradient(circle at top, #3b0066, #000000); }
+    body[data-color="retro"] { --theme-accent: #ff00ff; --wallpaper-bg: linear-gradient(135deg, #110022, #000044); }
+    body[data-color="void"] { --theme-accent: #ffffff; --wallpaper-bg: #000000; }
+    body[data-color="arctic"] { --theme-accent: #00ffff; --wallpaper-bg: radial-gradient(circle at center, #003344, #000000); }
 
     /* ==========================================================================
-       [ FEATURE 05 ] GPU ACCELERATED SCROLLBARS
+       [ GLOBAL RESETS ]
        ========================================================================== */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: var(--radius-pill); }
-    ::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
-
-    /* ==========================================================================
-       [ FEATURE 06 ] PROCEDURAL BACKGROUND ENGINE (CSS ONLY LAYER)
-       ========================================================================== */
-    #ambient-canvas {
-        position: fixed; inset: 0; z-index: var(--z-bg);
-        pointer-events: none; opacity: 0.6;
-    }
-    .crt-overlay {
-        position: fixed; inset: 0; z-index: 9998; pointer-events: none;
-        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-        background-size: 100% 2px, 3px 100%; opacity: 0.15;
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        -webkit-user-select: none;
     }
 
-    /* ==========================================================================
-       [ FEATURE 07 ] CUSTOM HARDWARE CURSOR WITH TRAILING SPRING PHYSICS
-       ========================================================================== */
-    #cursor-dot {
-        position: fixed; width: 4px; height: 4px; background: var(--color-primary);
-        border-radius: 50%; pointer-events: none; z-index: var(--z-cursor);
-        transform: translate(-50%, -50%); transition: width 0.1s, height 0.1s;
+    html, body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background: #000;
+        color: var(--theme-text);
+        font-family: var(--font-mac);
+        font-size: 13px;
+        -webkit-font-smoothing: antialiased;
     }
-    #cursor-ring {
-        position: fixed; width: 30px; height: 30px; border: 1px solid var(--color-primary);
-        border-radius: 50%; pointer-events: none; z-index: var(--z-cursor);
-        transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background 0.2s;
+
+    ::selection { background: var(--theme-selection); }
+
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; border: none; background: transparent; cursor: default; }
+    input { font-family: inherit; user-select: auto; -webkit-user-select: auto; }
+
+    /* ==========================================================================
+       [ CUSTOM HARDWARE CURSOR ]
+       ========================================================================== */
+    body { cursor: none !important; }
+    * { cursor: none !important; }
+    
+    #cursor-pointer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 18px;
+        height: 24px;
+        pointer-events: none;
+        z-index: var(--z-cursor);
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24"><path d="M1 1l16 11-6.5 1.5L16 21l-3 2-5-7.5L2 21z" fill="%23000" stroke="%23fff" stroke-width="1.5"/></svg>');
+        background-repeat: no-repeat;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+        transform-origin: top left;
         will-change: transform;
     }
-    body.hovering #cursor-dot { width: 0; height: 0; }
-    body.hovering #cursor-ring {
-        width: 50px; height: 50px; background: rgba(0,255,204,0.1);
-        border-color: rgba(0,255,204,0.5); backdrop-filter: blur(2px);
-    }
-    body.typing #cursor-ring { width: 10px; height: 10px; border-radius: 2px; animation: blink 1s infinite; }
 
-    /* ==========================================================================
-       [ FEATURE 08 ] DYNAMIC TASKBAR WITH HARDWARE TELEMETRY
-       ========================================================================== */
-    #taskbar {
-        position: fixed; top: 0; left: 0; right: 0; height: 40px;
-        background: var(--bg-panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-        border-bottom: 1px solid var(--border-glass); z-index: var(--z-ui);
-        display: flex; justify-content: space-between; align-items: center; padding: 0 1rem;
-        font-family: var(--font-mono); font-size: 11px; color: var(--color-text-muted);
+    body.dark-mode #cursor-pointer {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24"><path d="M1 1l16 11-6.5 1.5L16 21l-3 2-5-7.5L2 21z" fill="%23fff" stroke="%23000" stroke-width="1.5"/></svg>');
     }
-    .tb-group { display: flex; align-items: center; gap: 15px; }
-    .tb-item {
-        display: flex; align-items: center; gap: 6px; padding: 4px 8px;
-        border-radius: var(--radius-sm); transition: var(--transition-snap);
-        cursor: none; border: 1px solid transparent;
-    }
-    .tb-item.interactive:hover {
-        background: rgba(255,255,255,0.05); color: var(--color-primary);
-        border-color: var(--border-glass);
-    }
-    .tb-icon { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
-    
-    /* Hardware Gauges */
-    .gauge-track { width: 50px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
-    .gauge-fill { height: 100%; width: 0%; background: var(--color-primary); transition: width 0.5s ease-out, background 0.3s; }
-    .gauge-fill.warn { background: var(--color-warn); }
-    .gauge-fill.crit { background: var(--color-alert); }
 
-    /* ==========================================================================
-       [ FEATURE 09 ] DRAGGABLE & RESIZABLE CLI TERMINAL
-       ========================================================================== */
-    #terminal-window {
-        position: fixed; top: 60px; left: 20px; width: 500px; height: 350px;
-        background: rgba(5, 5, 10, 0.95); border: 1px solid var(--border-glass);
-        border-radius: var(--radius-md); box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-        z-index: var(--z-modal); display: flex; flex-direction: column;
-        opacity: 0; pointer-events: none; transform: translateY(20px) scale(0.95);
-        transition: opacity var(--transition-smooth), transform var(--transition-smooth);
-        backdrop-filter: blur(20px);
+    body.cursor-pointer #cursor-pointer {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" viewBox="0 0 22 24"><path d="M8 0c1.1 0 2 .9 2 2v6h2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v6c0 3.3-2.7 6-6 6H8c-3.3 0-6-2.7-6-6v-8c0-1.1.9-2 2-2h2V2c0-1.1.9-2 2-2z" fill="%23000" stroke="%23fff" stroke-width="1"/></svg>');
+        transform: translate(-6px, 0);
     }
-    #terminal-window.active { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
-    
-    .term-header {
-        height: 30px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border-glass);
-        display: flex; justify-content: space-between; align-items: center; padding: 0 10px;
-        font-family: var(--font-mono); font-size: 10px; color: var(--color-text-muted);
-        border-radius: var(--radius-md) var(--radius-md) 0 0;
-    }
-    .term-drag-handle { flex: 1; height: 100%; display: flex; align-items: center; }
-    .term-controls { display: flex; gap: 6px; }
-    .term-btn { width: 10px; height: 10px; border-radius: 50%; background: #333; transition: 0.2s; }
-    .term-btn.close:hover { background: var(--color-alert); box-shadow: 0 0 10px var(--color-alert); }
-    .term-btn.min:hover { background: var(--color-warn); }
-    .term-btn.max:hover { background: var(--color-success); }
 
-    .term-body {
-        flex: 1; padding: 10px; overflow-y: auto; font-family: var(--font-mono); font-size: 12px;
-        color: var(--color-text-main); display: flex; flex-direction: column; gap: 4px;
+    body.dark-mode.cursor-pointer #cursor-pointer {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" viewBox="0 0 22 24"><path d="M8 0c1.1 0 2 .9 2 2v6h2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v6c0 3.3-2.7 6-6 6H8c-3.3 0-6-2.7-6-6v-8c0-1.1.9-2 2-2h2V2c0-1.1.9-2 2-2z" fill="%23fff" stroke="%23000" stroke-width="1"/></svg>');
     }
-    .term-line { word-wrap: break-word; line-height: 1.4; }
-    .term-prompt { display: flex; gap: 8px; margin-top: 5px; }
-    .term-user { color: var(--color-success); font-weight: bold; }
-    .term-path { color: var(--color-secondary); font-weight: bold; }
-    .term-input-field {
-        flex: 1; background: transparent; border: none; outline: none;
-        color: var(--color-text-main); font-family: var(--font-mono); font-size: 12px;
-    }
-    .term-input-field::selection { background: rgba(255,255,255,0.2); }
 
-    /* ==========================================================================
-       [ FEATURE 10 ] MAIN VIEWPORT & SCROLLING ENGINE
-       ========================================================================== */
-    #viewport {
-        position: absolute; top: 40px; left: 0; right: 0; bottom: 0;
-        overflow-y: auto; overflow-x: hidden; padding-bottom: 100px;
+    body.cursor-text #cursor-pointer {
+        width: 8px;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="20" viewBox="0 0 8 20"><path d="M1 2h6M4 2v16M1 18h6" fill="none" stroke="%23000" stroke-width="1.5"/></svg>');
+        transform: translate(-4px, -10px);
+    }
+    body.dark-mode.cursor-text #cursor-pointer {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="20" viewBox="0 0 8 20"><path d="M1 2h6M4 2v16M1 18h6" fill="none" stroke="%23fff" stroke-width="1.5"/></svg>');
     }
 
     /* ==========================================================================
-       [ FEATURE 11 ] GLITCH TEXT TITLE & PARALLAX HERO
+       [ BOOT SCREEN ]
        ========================================================================== */
-    .hero { padding: 10vh 2rem 5vh; text-align: center; position: relative; }
-    .glitch-box { display: inline-block; position: relative; }
-    .hero-title {
-        font-size: clamp(3rem, 8vw, 7rem); font-weight: 900; letter-spacing: -2px;
-        text-transform: uppercase; color: var(--color-text-main);
-        position: relative; text-shadow: var(--glow-primary);
-        line-height: 1;
-    }
-    .hero-title::before, .hero-title::after {
-        content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: var(--bg-core);
-    }
-    .hero-title::before {
-        left: 3px; text-shadow: -2px 0 var(--color-alert);
-        clip: rect(24px, 550px, 90px, 0); animation: glitch-1 3s infinite linear alternate-reverse;
-    }
-    .hero-title::after {
-        left: -3px; text-shadow: -2px 0 var(--color-secondary);
-        clip: rect(85px, 550px, 140px, 0); animation: glitch-2 2.5s infinite linear alternate-reverse;
-    }
-    @keyframes glitch-1 {
-        0% { clip: rect(10px, 9999px, 44px, 0); } 20% { clip: rect(80px, 9999px, 11px, 0); }
-        40% { clip: rect(33px, 9999px, 90px, 0); } 60% { clip: rect(50px, 9999px, 20px, 0); }
-        80% { clip: rect(90px, 9999px, 55px, 0); } 100% { clip: rect(20px, 9999px, 80px, 0); }
-    }
-    @keyframes glitch-2 {
-        0% { clip: rect(65px, 9999px, 100px, 0); } 20% { clip: rect(20px, 9999px, 50px, 0); }
-        40% { clip: rect(80px, 9999px, 10px, 0); } 60% { clip: rect(10px, 9999px, 90px, 0); }
-        80% { clip: rect(40px, 9999px, 30px, 0); } 100% { clip: rect(90px, 9999px, 60px, 0); }
+    #boot-screen {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        z-index: var(--z-boot);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 1s ease-in-out;
     }
 
-    .hero-sys-info {
-        margin-top: 2rem; display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 10px;
-        font-family: var(--font-mono); font-size: 12px; color: var(--color-text-muted);
+    .boot-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: bootFadeIn 1s forwards 0.5s;
     }
-    .badge {
-        padding: 4px 12px; border-radius: var(--radius-pill); background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 6px;
+
+    @keyframes bootFadeIn {
+        to { opacity: 1; transform: translateY(0); }
     }
-    .badge-value { color: var(--color-primary); font-weight: bold; }
+
+    .boot-title {
+        color: #fff;
+        font-size: 2rem;
+        font-weight: 300;
+        letter-spacing: 4px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .os-selector {
+        display: flex;
+        gap: 60px;
+    }
+
+    .os-card {
+        width: 240px;
+        height: 320px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .os-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1), transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .os-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.3);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .os-card:hover::before { opacity: 1; }
+    .os-card:active { transform: translateY(0) scale(0.98); }
+
+    .os-icon {
+        width: 100px;
+        height: 100px;
+        fill: #fff;
+        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+    }
+
+    .os-card.win-card .os-icon { fill: #00a4ef; }
+
+    .os-name {
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    .boot-progress {
+        width: 200px;
+        height: 4px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 2px;
+        margin-top: 40px;
+        overflow: hidden;
+        display: none;
+    }
+
+    .boot-fill {
+        height: 100%;
+        width: 0%;
+        background: #fff;
+        border-radius: 2px;
+    }
 
     /* ==========================================================================
-       [ FEATURE 12 ] TOOLBAR WITH MAGNETIC BUTTONS & SEARCH
+       [ DESKTOP ENVIRONMENT ]
        ========================================================================== */
-    .toolbar {
-        max-width: 1800px; margin: 0 auto 2rem; padding: 0 2rem;
-        display: flex; justify-content: space-between; align-items: center;
-    }
-    .search-wrap { position: relative; width: 300px; }
-    .search-input {
-        width: 100%; background: var(--bg-panel); border: 1px solid var(--border-glass);
-        border-radius: var(--radius-pill); padding: 10px 20px 10px 40px;
-        color: var(--color-text-main); font-family: var(--font-ui); font-size: 14px;
-        transition: var(--transition-smooth); outline: none; backdrop-filter: blur(10px);
-    }
-    .search-input:focus { border-color: var(--color-primary); box-shadow: var(--glow-primary); background: rgba(0,255,204,0.05); }
-    .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; stroke: var(--color-text-muted); }
-    
-    .btn-group { display: flex; gap: 8px; background: var(--bg-panel); padding: 4px; border-radius: var(--radius-pill); border: 1px solid var(--border-glass); }
-    .btn-icon {
-        background: transparent; border: none; padding: 8px; border-radius: 50%; color: var(--color-text-muted);
-        transition: var(--transition-snap); display: flex; align-items: center; justify-content: center; position: relative;
-    }
-    .btn-icon:hover { background: rgba(255,255,255,0.1); color: var(--color-text-main); }
-    .btn-icon.active { background: var(--color-primary); color: var(--bg-core); box-shadow: var(--glow-primary); }
-    .btn-icon svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
-
-    /* ==========================================================================
-       [ FEATURE 13 ] 3D TILT LAZY-LOADED GRID SYSTEM (NO CPU OVERLOAD)
-       ========================================================================== */
-    .grid {
-        max-width: 1800px; margin: 0 auto; padding: 0 2rem;
-        display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 2rem;
-        perspective: 2000px; transform-style: preserve-3d;
+    #desktop {
+        position: absolute;
+        inset: 0;
+        background: var(--wallpaper-bg);
+        background-size: cover;
+        background-position: center;
+        z-index: var(--z-desktop);
+        transition: background 0.5s;
+        display: none;
     }
 
-    .node {
-        height: 400px; background: var(--bg-panel); border-radius: var(--radius-lg);
-        border: 1px solid var(--border-glass); display: flex; flex-direction: column;
-        position: relative; overflow: hidden; transform-style: preserve-3d;
-        transition: transform 0.1s ease, box-shadow var(--transition-smooth), border-color var(--transition-smooth);
-        will-change: transform; opacity: 0; transform: translateY(40px) scale(0.95);
+    #desktop-icons-container {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        gap: 15px;
+        z-index: var(--z-icons);
     }
-    .node.revealed { opacity: 1; transform: translateY(0) scale(1); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.2,0.8,0.2,1); }
-    .node:hover { z-index: 10; box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,255,204,0.05); border-color: var(--color-primary); }
 
-    /* Magic Border Gradient */
-    .node::before {
-        content: ''; position: absolute; inset: 0; border-radius: var(--radius-lg); padding: 2px;
-        background: conic-gradient(from var(--angle, 0deg), transparent 70%, var(--color-primary) 100%);
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; pointer-events: none;
-        transition: opacity var(--transition-smooth);
-    }
-    .node:hover::before { opacity: 1; }
-
-    /* Viewport Area */
-    .node-view {
-        flex: 1; margin: 15px 15px 0 15px; border-radius: var(--radius-md); background: #000;
-        position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
-        transform: translateZ(30px); /* 3D Pop */
-        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    /* Windows style icon alignment */
+    body.os-win #desktop-icons-container {
+        padding-top: 20px;
     }
     
-    .node-iframe { width: 100%; height: 100%; border: none; opacity: 0; transition: opacity var(--transition-smooth); background: #050505; }
-    .node-iframe.loaded { opacity: 1; filter: grayscale(20%) contrast(1.1); }
-    .node:hover .node-iframe.loaded { filter: none; }
+    /* Mac style icon alignment (right side usually, but left is fine for portfolio) */
+    body.os-mac #desktop-icons-container {
+        padding-top: calc(var(--mac-menu-height) + 20px);
+        align-content: flex-end;
+    }
 
-    /* Standby Overlay */
-    .node-standby {
-        position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
-        background: radial-gradient(circle at center, #111, #020202); z-index: 2; transition: opacity var(--transition-smooth);
+    .d-icon {
+        width: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 4px;
+        border-radius: 6px;
+        border: 1px solid transparent;
+        transition: background 0.1s, border 0.1s;
+        position: relative;
     }
-    .node.is-running .node-standby { opacity: 0; pointer-events: none; }
 
-    .node-icon-ring {
-        width: 70px; height: 70px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.05);
-        display: flex; align-items: center; justify-content: center; margin-bottom: 15px; position: relative;
+    .d-icon:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
     }
-    .node-icon-ring::after {
-        content: ''; position: absolute; inset: -5px; border-radius: 50%; border: 1px dashed var(--color-text-muted);
-        animation: spin 10s linear infinite; opacity: 0.2;
-    }
-    .node:hover .node-icon-ring::after { border-color: var(--color-primary); opacity: 0.8; animation-duration: 3s; }
-    .node-svg { width: 30px; height: 30px; fill: none; stroke: var(--color-text-muted); stroke-width: 1.5; transition: var(--transition-smooth); }
-    .node:hover .node-svg { stroke: var(--color-primary); transform: scale(1.1); }
 
-    .btn-init {
-        background: rgba(0,255,204,0.1); border: 1px solid var(--border-glass); color: var(--color-primary);
-        padding: 8px 20px; border-radius: var(--radius-pill); font-family: var(--font-mono); font-size: 11px;
-        letter-spacing: 2px; text-transform: uppercase; transition: var(--transition-snap);
+    .d-icon.selected {
+        background: rgba(255,255,255,0.2);
+        border-color: rgba(255,255,255,0.3);
     }
-    .btn-init:hover { background: var(--color-primary); color: var(--bg-core); box-shadow: var(--glow-primary); }
-    .btn-init.kill { background: rgba(255,0,85,0.1); border-color: rgba(255,0,85,0.3); color: var(--color-alert); }
-    .btn-init.kill:hover { background: var(--color-alert); color: #fff; box-shadow: var(--glow-alert); }
 
-    /* Node Metadata */
-    .node-meta {
-        padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-        border-bottom-left-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg);
-        position: relative; transform: translateZ(40px); /* 3D Pop */
+    body.os-win .d-icon.selected {
+        background: rgba(0, 120, 215, 0.4);
+        border-color: rgba(0, 120, 215, 0.6);
     }
-    .node-index {
-        position: absolute; top: -15px; right: 20px; background: var(--bg-core); border: 1px solid var(--border-glass);
-        padding: 4px 10px; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 10px;
-        color: var(--color-text-muted); box-shadow: 0 5px 10px rgba(0,0,0,0.5);
-    }
-    .node-cat { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--color-primary); margin-bottom: 5px; display: block; font-weight: 700; }
-    .node-name { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 8px; line-height: 1.2; }
-    .node-desc { font-size: 13px; color: var(--color-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-    /* Context Menu Trigger */
-    .ctx-trigger {
-        position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%;
-        background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
-        opacity: 0; transition: var(--transition-smooth); border: 1px solid rgba(255,255,255,0.1); z-index: 50;
+    .d-icon-img {
+        width: 48px;
+        height: 48px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     }
-    .node:hover .ctx-trigger { opacity: 1; }
-    .ctx-trigger:hover { background: var(--color-primary); }
-    .ctx-trigger:hover svg { stroke: var(--bg-core); }
 
-    /* ==========================================================================
-       [ FEATURE 14 ] CUSTOM CONTEXT MENU (OS Level)
-       ========================================================================== */
-    #ctx-menu {
-        position: fixed; background: rgba(15, 20, 25, 0.95); border: 1px solid var(--border-glass);
-        border-radius: var(--radius-md); padding: 8px 0; min-width: 200px; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
-        z-index: 100000; opacity: 0; pointer-events: none; transform: scale(0.95); transform-origin: top left;
-        transition: opacity 0.1s, transform 0.1s; backdrop-filter: blur(20px); font-family: var(--font-ui);
+    .d-icon-text {
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        text-align: center;
+        font-size: 11px;
+        line-height: 1.2;
+        word-wrap: break-word;
+        max-width: 100%;
     }
-    #ctx-menu.show { opacity: 1; pointer-events: auto; transform: scale(1); }
-    .ctx-item {
-        padding: 10px 20px; font-size: 13px; color: var(--color-text-main); display: flex; align-items: center; gap: 12px;
-        transition: 0.1s;
-    }
-    .ctx-item:hover { background: rgba(0, 255, 204, 0.1); color: var(--color-primary); }
-    .ctx-item.danger:hover { background: rgba(255, 0, 85, 0.1); color: var(--color-alert); }
-    .ctx-divider { height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0; }
+
+    body.os-win .d-icon-text { font-family: var(--font-win); }
+    body.os-mac .d-icon-text { font-family: var(--font-mac); }
 
     /* ==========================================================================
-       [ FEATURE 15 ] TOAST NOTIFICATION SYSTEM
+       [ MAC OS TOP MENU BAR ]
        ========================================================================== */
-    #toaster { position: fixed; bottom: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-    .toast {
-        background: rgba(10, 15, 20, 0.95); border: 1px solid var(--border-glass); border-left: 4px solid var(--color-primary);
-        padding: 12px 20px; border-radius: var(--radius-sm); box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-        display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: transform var(--transition-spring);
-        font-family: var(--font-mono); font-size: 12px; color: #fff; backdrop-filter: blur(10px); min-width: 300px;
+    #mac-menubar {
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: var(--mac-menu-height);
+        background: var(--theme-panel);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+        border-bottom: 1px solid var(--theme-panel-border);
+        display: none;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 10px;
+        z-index: var(--z-taskbar);
+        font-weight: 500;
+        font-size: 13px;
+        color: var(--theme-text);
     }
-    .toast.show { transform: translateX(0); }
-    .toast.err { border-left-color: var(--color-alert); }
-    .toast.warn { border-left-color: var(--color-warn); }
-    .toast-icon { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; flex-shrink: 0; }
+
+    body.os-mac #mac-menubar { display: flex; }
+
+    .mac-menu-left, .mac-menu-right { display: flex; align-items: center; height: 100%; }
+    
+    .mac-menu-item {
+        padding: 0 12px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        border-radius: 4px;
+        transition: background 0.1s;
+    }
+    .mac-menu-item:hover { background: var(--theme-hover); }
+    .mac-menu-item.active { background: var(--theme-active); }
+    .mac-menu-item.bold { font-weight: 700; }
+    
+    .mac-apple-logo { width: 14px; height: 14px; fill: currentColor; }
+    
+    .mac-icon { width: 16px; height: 16px; fill: currentColor; margin: 0 4px; }
 
     /* ==========================================================================
-       [ FEATURE 16 ] OS MODAL ENGINE
+       [ MAC OS DOCK ]
        ========================================================================== */
-    .modal-overlay {
-        position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
-        z-index: 90000; display: flex; align-items: center; justify-content: center;
-        opacity: 0; pointer-events: none; transition: opacity var(--transition-smooth);
+    #mac-dock-container {
+        position: absolute;
+        bottom: 10px;
+        left: 0; right: 0;
+        display: none;
+        justify-content: center;
+        z-index: var(--z-taskbar);
+        pointer-events: none;
     }
-    .modal-overlay.show { opacity: 1; pointer-events: auto; }
-    .modal-box {
-        background: var(--bg-core); border: 1px solid var(--border-glass); border-radius: var(--radius-lg);
-        width: 90%; max-width: 600px; padding: 40px; transform: translateY(30px) scale(0.95);
-        transition: transform var(--transition-spring); box-shadow: 0 30px 60px rgba(0,0,0,0.8), var(--glow-primary);
+
+    body.os-mac #mac-dock-container { display: flex; }
+
+    #mac-dock {
+        height: var(--mac-dock-height);
+        background: var(--theme-panel);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+        border: 1px solid var(--theme-panel-border);
+        border-radius: 20px;
+        padding: 5px;
+        display: flex;
+        align-items: flex-end;
+        gap: 5px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        pointer-events: auto;
+    }
+
+    .dock-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), margin 0.2s;
+        transform-origin: bottom;
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .dock-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    }
+
+    .dock-icon::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        width: 4px;
+        height: 4px;
+        background: var(--theme-text);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .dock-icon.running::after { opacity: 0.8; }
+
+    .dock-icon:hover {
+        transform: scale(1.4) translateY(-10px);
+        margin: 0 15px;
+        z-index: 10;
+    }
+
+    .dock-divider {
+        width: 1px;
+        height: 80%;
+        background: var(--theme-panel-border);
+        margin: 0 5px;
+        align-self: center;
+    }
+
+    /* Tooltip */
+    .dock-icon::before {
+        content: attr(data-title);
+        position: absolute;
+        top: -35px;
+        background: var(--theme-panel);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--theme-panel-border);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        color: var(--theme-text);
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .dock-icon:hover::before { opacity: 1; }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-30px); }
+    }
+    .dock-icon.bouncing { animation: bounce 0.5s ease-in-out 2; }
+
+    /* ==========================================================================
+       [ WINDOWS 11 TASKBAR ]
+       ========================================================================== */
+    #win-taskbar {
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: var(--win-taskbar-height);
+        background: var(--theme-panel);
+        backdrop-filter: blur(30px) saturate(200%);
+        -webkit-backdrop-filter: blur(30px) saturate(200%);
+        border-top: 1px solid var(--theme-panel-border);
+        display: none;
+        justify-content: space-between;
+        align-items: center;
+        z-index: var(--z-taskbar);
+        font-family: var(--font-win);
+        padding: 0 10px;
+    }
+
+    body.os-win #win-taskbar { display: flex; }
+
+    .win-tb-section { display: flex; align-items: center; height: 100%; gap: 4px; }
+    
+    .win-tb-center {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 4px;
+        height: 100%;
+        padding: 4px 0;
+    }
+
+    .win-tb-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s;
+        position: relative;
+    }
+
+    .win-tb-btn:hover { background: var(--theme-hover); }
+    .win-tb-btn:active { background: var(--theme-active); transform: scale(0.95); }
+    
+    .win-tb-btn.running::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        width: 16px;
+        height: 3px;
+        background: var(--theme-text-muted);
+        border-radius: 2px;
+        transition: width 0.2s, background 0.2s;
+    }
+    
+    .win-tb-btn.active::after {
+        width: 24px;
+        background: var(--theme-accent);
+    }
+
+    .win-tb-btn img, .win-tb-btn svg { width: 24px; height: 24px; }
+    .win-start-icon { width: 24px; height: 24px; fill: #0078d4; }
+
+    .win-tray-btn {
+        padding: 0 10px;
+        height: 36px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background 0.15s;
+        color: var(--theme-text);
+        font-size: 12px;
+    }
+    .win-tray-btn:hover { background: var(--theme-hover); }
+    .win-tray-icon { width: 16px; height: 16px; fill: currentColor; }
+    
+    .win-tray-time {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        line-height: 1.2;
+        font-size: 11px;
+    }
+
+    /* ==========================================================================
+       [ START MENU / LAUNCHPAD (Hidden by default) ]
+       ========================================================================== */
+    .start-menu {
+        position: absolute;
+        bottom: calc(var(--win-taskbar-height) + 15px);
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        width: 640px;
+        height: 720px;
+        background: var(--theme-panel);
+        backdrop-filter: blur(40px) saturate(200%);
+        border: 1px solid var(--theme-panel-border);
+        border-radius: 12px;
+        box-shadow: var(--theme-shadow);
+        z-index: var(--z-menus);
+        display: flex;
+        flex-direction: column;
+        padding: 30px;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        font-family: var(--font-win);
+        color: var(--theme-text);
+    }
+
+    .start-menu.show {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .start-search {
+        width: 100%;
+        height: 40px;
+        background: var(--theme-window-bg);
+        border: 1px solid var(--theme-window-border);
+        border-radius: 20px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+
+    .start-search input {
+        border: none; background: transparent; outline: none;
+        flex: 1; color: var(--theme-text); font-size: 14px;
+    }
+
+    .start-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 20px;
+    }
+
+    .start-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 10px;
+        border-radius: 8px;
+        transition: background 0.2s;
+    }
+    .start-item:hover { background: var(--theme-hover); }
+    .start-item img { width: 32px; height: 32px; }
+    .start-item span { font-size: 12px; text-align: center; }
+
+    /* ==========================================================================
+       [ WINDOW MANAGER ]
+       ========================================================================== */
+    .os-window {
+        position: absolute;
+        background: var(--theme-window-bg);
+        border: 1px solid var(--theme-window-border);
+        border-radius: 10px;
+        box-shadow: var(--theme-shadow);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: var(--z-windows);
+        min-width: 300px;
+        min-height: 200px;
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.2s, transform 0.2s, width 0.2s, height 0.2s, top 0.2s, left 0.2s;
+        will-change: transform, width, height, top, left;
+    }
+
+    .os-window.opened {
+        opacity: 1;
+        transform: scale(1);
+    }
+    
+    .os-window.minimized {
+        opacity: 0;
+        transform: scale(0.8) translateY(100px);
+        pointer-events: none;
+    }
+
+    .os-window.maximized {
+        border-radius: 0;
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .os-window.focused {
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        z-index: calc(var(--z-windows) + 10);
+    }
+
+    /* Window Header - Universal */
+    .win-header {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        position: relative;
+    }
+
+    .win-title {
+        flex: 1;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--theme-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        pointer-events: none;
+    }
+
+    /* Mac Specific Header */
+    body.os-mac .win-header {
+        background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+        border-bottom: 1px solid var(--theme-window-border);
+        height: 28px;
+    }
+
+    .mac-controls {
+        display: none;
+        gap: 8px;
+        padding-left: 5px;
+        z-index: 2;
+    }
+
+    body.os-mac .mac-controls { display: flex; }
+
+    .mac-btn {
+        width: 12px; height: 12px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
         position: relative; overflow: hidden;
     }
-    .modal-overlay.show .modal-box { transform: translateY(0) scale(1); }
-    .modal-close {
-        position: absolute; top: 20px; right: 20px; background: transparent; border: none;
-        color: var(--color-text-muted); padding: 8px; border-radius: 50%; transition: 0.2s;
+    .mac-btn::before {
+        content: ''; position: absolute; width: 8px; height: 8px;
+        background-position: center; background-repeat: no-repeat;
+        opacity: 0; transition: opacity 0.2s;
     }
-    .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; transform: rotate(90deg); }
-    .modal-title { color: var(--color-primary); font-size: 1.5rem; margin-bottom: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
-    .modal-body { font-size: 14px; color: var(--color-text-muted); line-height: 1.7; }
+    .mac-controls:hover .mac-btn::before { opacity: 1; }
+
+    .mac-close { background: #ff5f56; border: 1px solid #e0443e; }
+    .mac-close::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><line x1="1" y1="1" x2="7" y2="7" stroke="%234d0000" stroke-width="1.5"/><line x1="7" y1="1" x2="1" y2="7" stroke="%234d0000" stroke-width="1.5"/></svg>'); }
     
-    /* Hardware Graph inside Modal */
-    .hw-graph { display: flex; align-items: flex-end; gap: 4px; height: 100px; margin: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
-    .graph-bar { flex: 1; background: var(--color-primary); border-radius: 2px 2px 0 0; min-height: 2px; transition: height 0.3s; opacity: 0.8; }
+    .mac-min { background: #ffbd2e; border: 1px solid #dea123; }
+    .mac-min::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><line x1="1" y1="4" x2="7" y2="4" stroke="%23995700" stroke-width="1.5"/></svg>'); }
+    
+    .mac-max { background: #27c93f; border: 1px solid #1aab29; }
+    .mac-max::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><path d="M1 4l3 3 3-3M4 7V1" stroke="%23006500" stroke-width="1.5" fill="none"/></svg>'); }
+
+    body.os-mac .win-title {
+        position: absolute; left: 0; right: 0;
+        font-family: var(--font-mac);
+    }
+
+    /* Win Specific Header */
+    body.os-win .win-header {
+        height: 32px;
+        background: transparent;
+    }
+
+    body.os-win .win-title {
+        text-align: left;
+        padding-left: 10px;
+        font-family: var(--font-win);
+        font-weight: 400;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .win-controls {
+        display: none;
+        height: 100%;
+        z-index: 2;
+    }
+
+    body.os-win .win-controls { display: flex; }
+
+    .win-btn {
+        width: 46px; height: 100%;
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.1s; color: var(--theme-text);
+    }
+    .win-btn:hover { background: var(--theme-hover); }
+    .win-btn.win-close:hover { background: #e81123; color: white; }
+    .win-btn svg { width: 10px; height: 10px; stroke: currentColor; stroke-width: 1; fill: none; }
+
+    /* Window Content */
+    .win-content {
+        flex: 1;
+        position: relative;
+        background: var(--theme-bg);
+        overflow: hidden;
+    }
+
+    .win-iframe {
+        width: 100%; height: 100%; border: none;
+        background: #fff; /* Always white background for iframes to prevent transparent bleed */
+    }
+    body.dark-mode .win-iframe { filter: invert(0.9) hue-rotate(180deg); }
+
+    /* Resize handles */
+    .resize-handle { position: absolute; z-index: 10; }
+    .rs-n { top: -3px; left: 0; right: 0; height: 6px; }
+    .rs-s { bottom: -3px; left: 0; right: 0; height: 6px; }
+    .rs-e { top: 0; bottom: 0; right: -3px; width: 6px; }
+    .rs-w { top: 0; bottom: 0; left: -3px; width: 6px; }
+    .rs-nw { top: -3px; left: -3px; width: 10px; height: 10px; }
+    .rs-ne { top: -3px; right: -3px; width: 10px; height: 10px; }
+    .rs-sw { bottom: -3px; left: -3px; width: 10px; height: 10px; }
+    .rs-se { bottom: -3px; right: -3px; width: 10px; height: 10px; }
 
     /* ==========================================================================
-       [ FEATURE 17 ] KEYFRAMES & UTILS
+       [ CONTEXT MENU ]
        ========================================================================== */
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-    @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
-    @keyframes rotate-angle { to { --angle: 360deg; } }
-    .node:hover { animation: rotate-angle 3s linear infinite; }
+    #context-menu {
+        position: fixed;
+        background: var(--theme-panel);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--theme-panel-border);
+        box-shadow: var(--theme-shadow);
+        border-radius: 8px;
+        padding: 5px 0;
+        min-width: 200px;
+        z-index: var(--z-menus);
+        display: none;
+        flex-direction: column;
+        font-family: var(--font-mac);
+        color: var(--theme-text);
+        opacity: 0;
+        transform: scale(0.95);
+        transform-origin: top left;
+        transition: opacity 0.1s, transform 0.1s;
+    }
 
-    /* Text Colors */
-    .tc-pri { color: var(--color-primary); }
-    .tc-sec { color: var(--color-secondary); }
-    .tc-err { color: var(--color-alert); }
-    .tc-warn { color: var(--color-warn); }
-    .tc-succ { color: var(--color-success); }
+    body.os-win #context-menu { font-family: var(--font-win); border-radius: 4px; }
+
+    #context-menu.show {
+        display: flex;
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .ctx-item {
+        padding: 6px 15px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+    }
+
+    .ctx-item:hover { background: var(--theme-accent); color: #fff; }
+    
+    .ctx-divider {
+        height: 1px; background: var(--theme-panel-border);
+        margin: 4px 0;
+    }
+
+    /* ==========================================================================
+       [ SYSTEM INFO MODAL ]
+       ========================================================================== */
+    #sys-modal {
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        width: 400px;
+        background: var(--theme-window-bg);
+        border: 1px solid var(--theme-window-border);
+        border-radius: 12px;
+        box-shadow: var(--theme-shadow);
+        z-index: var(--z-modals);
+        display: none;
+        flex-direction: column;
+        opacity: 0;
+        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        color: var(--theme-text);
+    }
+
+    #sys-modal.show { display: flex; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+    .sys-header {
+        height: 40px; border-bottom: 1px solid var(--theme-panel-border);
+        display: flex; justify-content: center; align-items: center; font-weight: bold; position: relative;
+    }
+    
+    .sys-close { position: absolute; left: 10px; } /* Mac style */
+    body.os-win .sys-close { left: auto; right: 10px; } /* Win style */
+
+    .sys-content {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .sys-logo { width: 80px; height: 80px; fill: var(--theme-text); }
+    body.os-win .sys-logo { fill: #00a4ef; }
+
+    .sys-details { width: 100%; text-align: left; font-size: 12px; line-height: 1.6; }
+    .sys-details strong { display: inline-block; width: 100px; color: var(--theme-text-muted); }
+
+    /* ==========================================================================
+       [ NOTIFICATIONS ]
+       ========================================================================== */
+    #notifier {
+        position: fixed; z-index: var(--z-modals);
+        display: flex; flex-direction: column; gap: 10px; pointer-events: none;
+    }
+
+    body.os-mac #notifier { top: 40px; right: 20px; }
+    body.os-win #notifier { bottom: 60px; right: 20px; }
+
+    .toast {
+        background: var(--theme-panel); backdrop-filter: blur(20px);
+        border: 1px solid var(--theme-panel-border); border-radius: 8px;
+        padding: 15px; width: 300px; box-shadow: var(--theme-shadow);
+        display: flex; gap: 15px; color: var(--theme-text);
+        transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .toast.show { transform: translateX(0); }
+    .toast-icon { width: 24px; height: 24px; fill: var(--theme-accent); flex-shrink: 0; }
+    .toast-content { display: flex; flex-direction: column; gap: 4px; }
+    .toast-title { font-weight: bold; font-size: 13px; }
+    .toast-msg { font-size: 12px; color: var(--theme-text-muted); }
+
 </style>
 </head>
 <body>
 
 <svg style="display: none;">
     <defs>
-        <symbol id="i-term" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></symbol>
-        <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></symbol>
-        <symbol id="i-ram" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="6" y1="17" x2="6" y2="21"></line><line x1="10" y1="17" x2="10" y2="21"></line><line x1="14" y1="17" x2="14" y2="21"></line><line x1="18" y1="17" x2="18" y2="21"></line><line x1="6" y1="3" x2="6" y2="7"></line><line x1="10" y1="3" x2="10" y2="7"></line><line x1="14" y1="3" x2="14" y2="7"></line><line x1="18" y1="3" x2="18" y2="7"></line></symbol>
-        <symbol id="i-bat" viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2" ry="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line><rect x="4" y="9" width="12" height="6"></rect></symbol>
-        <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></symbol>
-        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></symbol>
-        <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></symbol>
-        <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></symbol>
-        <symbol id="i-power" viewBox="0 0 24 24"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></symbol>
-        <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></symbol>
-        <symbol id="i-close" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></symbol>
-        <symbol id="i-max" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></symbol>
-        <symbol id="i-min" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line></symbol>
-        <symbol id="i-more" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></symbol>
-        <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></symbol>
-        <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></symbol>
-        <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></symbol>
-        <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></symbol>
-        <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></symbol>
-        <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></symbol>
-        <symbol id="i-game" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></symbol>
-        <symbol id="i-audio" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></symbol>
-        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></symbol>
-        <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></symbol>
-        <symbol id="i-drone" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></symbol>
+        <symbol id="logo-mac" viewBox="0 0 170 170"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.92.21-9.84-1.96-14.74-6.53-3.13-2.73-7.1-7.43-11.9-14.1C29.24 138.4 25.4 130 22.7 120.08c-2.71-9.92-4.06-19.6-4.06-29.04 0-11.83 2.68-21.6 8.05-29.31 5.31-7.61 12.16-12.35 20.53-14.2 4.18-.79 8.78-.17 13.8 1.86 5.01 2.03 8.52 3.05 10.53 3.05 1.7 0 5.46-1.19 11.28-3.56 5.82-2.38 11-3.4 15.54-3.06 6.33.22 11.85 1.86 16.54 4.92 4.7 3.06 8.24 7.02 10.63 11.88-9.01 5.4-13.53 13.3-13.56 23.7 0 8.24 2.82 15.06 8.46 20.45 5.63 5.39 12.44 8.56 20.44 9.53-2.03 6.01-4.72 11.66-8.08 16.96zM113.83 23.01c0 8.16-3.08 15.65-9.23 22.48-6.16 6.83-13.78 10.6-22.88 11.31-1.03-8.02 1.62-15.64 7.95-22.86C96 6.72 103.74 2.62 113.15 2c.45 7.01.68 14.02.68 21.01z"/></symbol>
+        <symbol id="logo-win" viewBox="0 0 88 88"><path d="M0 12.4L35.7 7v33.8H0V12.4zm40-6.1L88 0v40H40V6.3zM0 45h35.7v33.7L0 73.4V45zm40 0h48v40L40 79.7V45z"/></symbol>
+        <symbol id="logo-win11" viewBox="0 0 88 88"><path d="M0 0h42v42H0V0zm46 0h42v42H46V0zM0 46h42v42H0V46zm46 0h42v42H46V46z"/></symbol>
+        
+        <symbol id="app-safari" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#fff" stroke="#ccc" stroke-width="2"/><circle cx="50" cy="50" r="40" fill="#007aff"/><polygon points="35,65 45,35 65,35 55,65" fill="#fff" transform="rotate(45 50 50)"/></symbol>
+        <symbol id="app-finder" viewBox="0 0 100 100"><rect x="10" y="20" width="80" height="60" rx="10" fill="#fff"/><rect x="10" y="20" width="40" height="60" rx="10" fill="#007aff"/><path d="M50 20v60M30 40c0 10 20 10 20 0M70 40c0 10-20 10-20 0" stroke="#000" stroke-width="4" fill="none"/></symbol>
+        <symbol id="app-edge" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#0078d4"/><path d="M30 50a20 20 0 1 1 40 0 20 20 0 1 0 -40 0" fill="#00ffcc"/></symbol>
+        <symbol id="app-explorer" viewBox="0 0 100 100"><rect x="10" y="25" width="80" height="60" fill="#ffcc00" rx="5"/><rect x="10" y="15" width="30" height="20" fill="#ffcc00" rx="5"/><rect x="15" y="30" width="70" height="50" fill="#fff" rx="3"/></symbol>
+        
+        <symbol id="app-ice" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2" fill="#00ffcc"/><polyline points="2 17 12 22 22 17" fill="none" stroke="#fff" stroke-width="2"/><polyline points="2 12 12 17 22 12" fill="none" stroke="#fff" stroke-width="2"/></symbol>
+        <symbol id="app-drop" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="#ff0055"/></symbol>
+        <symbol id="app-fart" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" fill="none" stroke="#ffaa00" stroke-width="2"/><circle cx="6" cy="18" r="3" fill="#ffaa00"/><circle cx="18" cy="16" r="3" fill="#ffaa00"/></symbol>
+
+        <symbol id="ui-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="20" r="1.5" fill="currentColor"/></symbol>
+        <symbol id="ui-battery" viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="22" y1="11" x2="22" y2="13" stroke="currentColor" stroke-width="2"/><rect x="4" y="9" width="12" height="6" fill="currentColor"/></symbol>
+        <symbol id="ui-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"/></symbol>
+        <symbol id="ui-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+        <symbol id="ui-volume" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+        <symbol id="ui-close" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="1.5"/></symbol>
+        <symbol id="ui-min" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.5"/></symbol>
+        <symbol id="ui-max" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+        <symbol id="ui-restore" viewBox="0 0 24 24"><rect x="4" y="8" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"/><polyline points="8 4 20 4 20 16" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
     </defs>
 </svg>
 
-<div id="cursor-ring"></div>
-<div id="cursor-dot"></div>
+<div id="cursor-pointer"></div>
 
-<canvas id="ambient-canvas"></canvas>
-<div class="crt-overlay"></div>
-
-<header id="taskbar">
-    <div class="tb-group">
-        <div class="tb-item interactive" id="btn-cli" title="Toggle Terminal (T)">
-            <svg class="tb-icon"><use href="#i-term"></use></svg> CLI
+<div id="boot-screen">
+    <div class="boot-content">
+        <h1 class="boot-title">SELECT OPERATING SYSTEM</h1>
+        <div class="os-selector">
+            <div class="os-card mac-card" onclick="System.boot('mac')">
+                <svg class="os-icon"><use href="#logo-mac"></use></svg>
+                <div class="os-name">macOS Mode</div>
+            </div>
+            <div class="os-card win-card" onclick="System.boot('win')">
+                <svg class="os-icon"><use href="#logo-win11"></use></svg>
+                <div class="os-name">Windows Mode</div>
+            </div>
         </div>
-        <div class="tb-item interactive" id="btn-reboot" title="Reboot System">
-            <svg class="tb-icon"><use href="#i-power"></use></svg>
-        </div>
-    </div>
-    
-    <div class="tb-group" style="position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; color: var(--color-text-main);">
-        <span id="sys-clock">00:00:00</span>
-    </div>
-    
-    <div class="tb-group">
-        <div class="tb-item" title="CPU Load">
-            <svg class="tb-icon"><use href="#i-cpu"></use></svg>
-            <div class="gauge-track"><div class="gauge-fill" id="hw-cpu-fill"></div></div>
-            <span id="hw-cpu-txt" style="width:25px;text-align:right;">0%</span>
-        </div>
-        <div class="tb-item" title="RAM Allocation">
-            <svg class="tb-icon"><use href="#i-ram"></use></svg>
-            <div class="gauge-track"><div class="gauge-fill" id="hw-ram-fill"></div></div>
-            <span id="hw-ram-txt" style="width:25px;text-align:right;">0%</span>
-        </div>
-        <div class="tb-item" title="Battery">
-            <svg class="tb-icon"><use href="#i-bat"></use></svg>
-            <span id="hw-bat-txt">--%</span>
-        </div>
-        <div class="tb-item interactive" id="btn-info" title="System Info">
-            <svg class="tb-icon"><use href="#i-alert"></use></svg>
-            <span id="hw-gpu-txt" style="max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Detecting...</span>
-        </div>
-    </div>
-</header>
-
-<div id="terminal-window">
-    <div class="term-header" id="term-drag">
-        <div class="term-drag-handle">root@liquid-os ~</div>
-        <div class="term-controls">
-            <div class="term-btn min"></div>
-            <div class="term-btn max"></div>
-            <div class="term-btn close" id="btn-close-cli"></div>
-        </div>
-    </div>
-    <div class="term-body" id="term-output">
-        <div style="color:var(--color-primary); margin-bottom: 10px;">
-           ULP Terminal v6.0.0<br>
-           Type 'help' for commands.
-        </div>
-    </div>
-    <div style="padding: 10px; border-top: 1px solid var(--border-glass); display: flex; align-items: center; gap: 8px;">
-        <span class="term-user">user@sys</span><span class="term-path">~$</span>
-        <input type="text" class="term-input-field" id="term-input" autocomplete="off" spellcheck="false">
+        <div class="boot-progress" id="boot-loader"><div class="boot-fill" id="boot-fill"></div></div>
     </div>
 </div>
 
-<main id="viewport">
-    
-    <section class="hero">
-        <div class="glitch-box">
-            <h1 class="hero-title" data-text="LIQUID OS">LIQUID OS</h1>
+<div id="desktop" oncontextmenu="Desktop.showContext(event)">
+    <div id="desktop-icons-container">
         </div>
-        <div class="hero-sys-info">
-            <div class="badge"><svg class="tb-icon"><use href="#i-cpu"></use></svg> Cores: <span class="badge-value" id="badge-cores">--</span></div>
-            <div class="badge"><svg class="tb-icon"><use href="#i-ram"></use></svg> Memory: <span class="badge-value" id="badge-ram">-- GB</span></div>
-            <div class="badge"><svg class="tb-icon"><use href="#i-code"></use></svg> OS: <span class="badge-value" id="badge-os">--</span></div>
-            <div class="badge"><svg class="tb-icon"><use href="#i-wifi"></use></svg> Net: <span class="badge-value" id="badge-net">--</span></div>
-        </div>
-    </section>
-
-    <div class="toolbar">
-        <div class="search-wrap">
-            <svg class="search-icon"><use href="#i-search"></use></svg>
-            <input type="text" class="search-input" id="node-search" placeholder="Filter protocols...">
-        </div>
-        <div class="btn-group">
-            <button class="btn-icon active" id="view-grid" title="Grid View"><svg><use href="#i-grid"></use></svg></button>
-            <button class="btn-icon" id="view-list" title="List View"><svg><use href="#i-list"></use></svg></button>
-            <button class="btn-icon" id="theme-toggle" title="Cycle Theme"><svg><use href="#i-settings"></use></svg></button>
-        </div>
-    </div>
-
-    <div class="grid" id="main-grid">
-        </div>
-
-</main>
-
-<div id="ctx-menu">
-    <div class="ctx-item" id="ctx-new-tab"><svg class="tb-icon"><use href="#i-link"></use></svg> Open in New Tab</div>
-    <div class="ctx-item" id="ctx-copy"><svg class="tb-icon"><use href="#i-copy"></use></svg> Copy Endpoint</div>
-    <div class="ctx-divider"></div>
-    <div class="ctx-item" id="ctx-details"><svg class="tb-icon"><use href="#i-eye"></use></svg> Inspect Node</div>
-    <div class="ctx-divider"></div>
-    <div class="ctx-item danger" id="ctx-kill"><svg class="tb-icon"><use href="#i-power"></use></svg> SIGKILL Process</div>
 </div>
 
-<div id="toaster"></div>
+<div id="mac-menubar">
+    <div class="mac-menu-left">
+        <div class="mac-menu-item" onclick="System.showInfo()"><svg class="mac-apple-logo"><use href="#logo-mac"></use></svg></div>
+        <div class="mac-menu-item bold">Jaap_OS</div>
+        <div class="mac-menu-item">File</div>
+        <div class="mac-menu-item">Edit</div>
+        <div class="mac-menu-item" onclick="System.cycleTheme()">Theme</div>
+        <div class="mac-menu-item" onclick="System.reboot()">Restart</div>
+    </div>
+    <div class="mac-menu-right">
+        <div class="mac-menu-item"><svg class="mac-icon"><use href="#ui-wifi"></use></svg></div>
+        <div class="mac-menu-item"><svg class="mac-icon"><use href="#ui-volume"></use></svg></div>
+        <div class="mac-menu-item"><svg class="mac-icon"><use href="#ui-battery"></use></svg> 100%</div>
+        <div class="mac-menu-item" id="mac-clock">Mon 9:41 AM</div>
+    </div>
+</div>
 
-<div class="modal-overlay" id="sys-modal">
-    <div class="modal-box">
-        <button class="modal-close" id="btn-close-modal"><svg class="tb-icon"><use href="#i-close"></use></svg></button>
-        <h2 class="modal-title">Hardware Detection Engine</h2>
-        <div class="modal-body" id="sys-modal-body">
+<div id="mac-dock-container">
+    <div id="mac-dock">
+        <div class="dock-icon" data-title="Finder" onclick="System.showInfo()"><svg width="48" height="48"><use href="#app-finder"></use></svg></div>
+        <div class="dock-divider"></div>
+        <div class="dock-divider"></div>
+        <div class="dock-icon" data-title="System Settings" onclick="System.cycleTheme()"><svg width="48" height="48" fill="#555"><use href="#ui-settings"></use></svg></div>
+    </div>
+</div>
+
+<div id="win-taskbar">
+    <div class="win-tb-section">
+        </div>
+    <div class="win-tb-center" id="win-taskbar-apps">
+        <div class="win-tb-btn" onclick="document.getElementById('start-menu').classList.toggle('show')">
+            <svg class="win-start-icon"><use href="#logo-win11"></use></svg>
+        </div>
+        <div class="win-tb-btn" onclick="System.showInfo()">
+            <svg width="24" height="24"><use href="#app-explorer"></use></svg>
+        </div>
+        </div>
+    <div class="win-tb-section">
+        <div class="win-tray-btn" onclick="System.cycleTheme()">
+            <svg class="win-tray-icon"><use href="#ui-wifi"></use></svg>
+            <svg class="win-tray-icon"><use href="#ui-volume"></use></svg>
+            <svg class="win-tray-icon"><use href="#ui-battery"></use></svg>
+        </div>
+        <div class="win-tray-btn">
+            <div class="win-tray-time">
+                <span id="win-time">9:41 AM</span>
+                <span id="win-date">10/24/2026</span>
             </div>
-        <div class="hw-graph" id="modal-graph">
-            </div>
+        </div>
+    </div>
+</div>
+
+<div class="start-menu" id="start-menu">
+    <div class="start-search">
+        <svg class="win-tray-icon"><use href="#ui-search"></use></svg>
+        <input type="text" placeholder="Type here to search">
+    </div>
+    <h3 style="margin-bottom: 15px; font-size: 14px;">Pinned</h3>
+    <div class="start-grid" id="start-grid">
+        <div class="start-item" onclick="System.cycleTheme()">
+            <svg width="32" height="32" fill="#0078d4"><use href="#ui-settings"></use></svg>
+            <span>Settings</span>
+        </div>
+        <div class="start-item" onclick="System.reboot()">
+            <svg width="32" height="32" fill="#e81123"><use href="#ui-close"></use></svg>
+            <span>Restart</span>
+        </div>
+        </div>
+</div>
+
+<div id="context-menu"></div>
+<div id="notifier"></div>
+
+<div class="modal-overlay" id="sys-overlay" onclick="System.hideInfo()">
+    <div class="modal-box" id="sys-modal" onclick="event.stopPropagation()">
+        <div class="sys-header">
+            <div class="sys-close mac-controls"><div class="mac-btn mac-close" onclick="System.hideInfo()"></div></div>
+            About Jaap OS
+            <div class="sys-close win-controls"><div class="win-btn win-close" onclick="System.hideInfo()"><svg><use href="#ui-close"></use></svg></div></div>
+        </div>
+        <div class="sys-content">
+            <svg class="sys-logo" id="sys-logo"><use href="#logo-mac"></use></svg>
+            <h2>Jaap OS Version 6.0</h2>
+            <div class="sys-details" id="hw-details">
+                </div>
+            <button onclick="System.cycleTheme()" style="padding: 8px 16px; background: var(--theme-accent); color: #fff; border-radius: 6px; margin-top: 10px;">Cycle Theme / Color</button>
+        </div>
     </div>
 </div>
 
 <script>
 /**
- * ULP V6 KERNEL
- * Written in Vanilla JS. No dependencies.
- * Features: Hardware detection, Audio synth, CLI, Memory management, Procedural graphics.
+ * JAAP OS KERNEL
+ * Dual-boot architecture (macOS / Windows 11 style)
  */
 
-// ==========================================================================
-// [ FEATURE 27 ] CONFIG & GLOBAL STATE
-// ==========================================================================
-const CONFIG = {
-    totalNodes: 100, // Generate massive grid to prove performance
-    maxRamIframes: 4, // Strict RAM limit governor
-    themes: ['default', 'matrix', 'cyberpunk', 'retro', 'void', 'neon', 'arctic']
-};
-
-const STATE = {
-    activePIDs: new Map(), // map id -> url
-    themeIdx: 0,
-    ctxTarget: null,
-    konamiProgress: 0,
-    cpuBase: 5,
-    mouse: { x: window.innerWidth/2, y: window.innerHeight/2 }
-};
-
-// ==========================================================================
-// [ FEATURE 28 ] DATABASE DEFINITIONS (Targeted user links + massive expansion)
-// ==========================================================================
-const NODE_DB = [
-    { id: 'SYS-001', name: "Ice Age Engine", url: "https://jaapthind.github.io/IceAge/", type: "Physics_Node", icon: "i-game", desc: "Cryogenic logic testing facility. Native collision." },
-    { id: 'SYS-002', name: "Jaaper Dropper", url: "https://jaapthind.github.io/JaaperDropper/", type: "Gravity_Sim", icon: "i-drop", desc: "Exponential difficulty gravity dropping mechanics." },
-    { id: 'SYS-003', name: "FelixFart Audio", url: "https://jaapthind.github.io/FelixFart/", type: "Acoustic_Test", icon: "i-audio", desc: "Acoustic resonance warning. Extreme caution." }
+const APPS = [
+    { id: 'app-ice', title: 'Ice Age Engine', url: 'https://jaapthind.github.io/IceAge/', icon: 'app-ice', macIcon: 'app-safari', winIcon: 'app-edge' },
+    { id: 'app-drop', title: 'Jaaper Dropper', url: 'https://jaapthind.github.io/JaaperDropper/', icon: 'app-drop', macIcon: 'app-safari', winIcon: 'app-edge' },
+    { id: 'app-fart', title: 'FelixFart Audio', url: 'https://jaapthind.github.io/FelixFart/', icon: 'app-fart', macIcon: 'app-safari', winIcon: 'app-edge' }
 ];
 
-// Procedural generation to hit 100 nodes for massive scale
-const prefixes = ['Quantum', 'Neural', 'Cyber', 'Void', 'Plasma', 'Aero', 'Crypto', 'Synth'];
-const suffixes = ['Matrix', 'Core', 'Relay', 'Node', 'Grid', 'Link', 'Hub', 'Engine'];
-const icons = ['i-database', 'i-code', 'i-shield', 'i-target', 'i-drone', 'i-server'];
-
-for (let i = 4; i <= CONFIG.totalNodes; i++) {
-    const p = prefixes[Math.floor(Math.random() * prefixes.length)];
-    const s = suffixes[Math.floor(Math.random() * suffixes.length)];
-    const icn = icons[Math.floor(Math.random() * icons.length)];
-    NODE_DB.push({
-        id: `SYS-${String(i).padStart(3, '0')}`,
-        name: `${p} ${s} ${i}`,
-        url: `about:blank#unallocated-${i}`,
-        type: "Memory_Sector",
-        icon: icn,
-        desc: `Unallocated logical sector. Ready for data injection sequence.`
-    });
-}
+const STATE = {
+    os: null, // 'mac' or 'win'
+    themeIdx: 0,
+    themes: ['default', 'matrix', 'cyberpunk', 'retro', 'void', 'arctic'],
+    windows: [],
+    zIndexCounter: 100
+};
 
 // ==========================================================================
-// [ FEATURE 29 ] PROCEDURAL AUDIO SYNTHESIZER (No external MP3s needed)
+// [ SYSTEM KERNEL ]
 // ==========================================================================
-class AudioEngine {
-    constructor() {
-        this.ctx = null;
-        this.enabled = false;
-        // Init on first user interaction to bypass browser autoplay blocks
-        document.body.addEventListener('click', () => this.init(), { once: true });
-        document.body.addEventListener('keydown', () => this.init(), { once: true });
-    }
-
-    init() {
-        if(this.ctx) return;
-        try {
-            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-            this.enabled = true;
-        } catch(e) { console.warn("Audio disabled"); }
-    }
-
-    play(type) {
-        if(!this.enabled || !this.ctx) return;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-
-        const now = this.ctx.currentTime;
-        
-        switch(type) {
-            case 'hover': // [ FEATURE 30 ] Hover sound
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, now);
-                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.05);
-                gain.gain.setValueAtTime(0.05, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-                osc.start(now); osc.stop(now + 0.05);
-                break;
-            case 'click': // [ FEATURE 31 ] Click sound
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(150, now);
-                osc.frequency.exponentialRampToValueAtTime(50, now + 0.1);
-                gain.gain.setValueAtTime(0.1, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-                osc.start(now); osc.stop(now + 0.1);
-                break;
-            case 'error': // [ FEATURE 32 ] Error sound
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(100, now);
-                osc.frequency.linearRampToValueAtTime(80, now + 0.3);
-                gain.gain.setValueAtTime(0.2, now);
-                gain.gain.linearRampToValueAtTime(0.001, now + 0.3);
-                osc.start(now); osc.stop(now + 0.3);
-                break;
-            case 'success': // [ FEATURE 33 ] Success sound
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(400, now);
-                osc.frequency.setValueAtTime(600, now + 0.1);
-                gain.gain.setValueAtTime(0.1, now);
-                gain.gain.linearRampToValueAtTime(0.001, now + 0.3);
-                osc.start(now); osc.stop(now + 0.3);
-                break;
-        }
-    }
-}
-const Synth = new AudioEngine();
-
-
-// ==========================================================================
-// [ FEATURE 34 ] HARDWARE DETECTION ENGINE
-// ==========================================================================
-class HardwareDetector {
-    constructor() {
-        this.data = {
-            cores: navigator.hardwareConcurrency || 'Unknown',
-            ram: navigator.deviceMemory || 'Unknown',
-            os: this.detectOS(),
-            browser: this.detectBrowser(),
-            gpu: 'Detecting...',
-            net: 'Unknown',
-            battery: 'Unknown'
-        };
-        this.init();
-    }
-
-    async init() {
-        this.detectGPU();
-        this.detectNetwork();
-        await this.detectBattery();
-        this.updateDOM();
-    }
-
-    // [ FEATURE 35 ] OS Detection
-    detectOS() {
-        const ua = navigator.userAgent;
-        if (ua.includes("Win")) return "Windows";
-        if (ua.includes("Mac")) return "macOS";
-        if (ua.includes("Linux")) return "Linux";
-        if (ua.includes("Android")) return "Android";
-        if (ua.includes("iPhone") || ua.includes("iPad")) return "iOS";
-        return "Unknown OS";
-    }
-
-    // [ FEATURE 36 ] Browser Detection
-    detectBrowser() {
-        const ua = navigator.userAgent;
-        if (ua.includes("Chrome")) return "Chrome/Blink";
-        if (ua.includes("Firefox")) return "Firefox/Gecko";
-        if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari/WebKit";
-        return "Browser";
-    }
-
-    // [ FEATURE 37 ] WebGL GPU Detection (Unmasked Renderer)
-    detectGPU() {
-        try {
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            if (gl) {
-                const ext = gl.getExtension('WEBGL_debug_renderer_info');
-                if (ext) {
-                    this.data.gpu = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL);
-                } else {
-                    this.data.gpu = "WebGL Supported (Hidden)";
-                }
-            } else {
-                this.data.gpu = "No WebGL";
+class System {
+            static boot(osType) {
+            STATE.os = osType; 
+            document.body.className = `os-${osType} dark-mode`;
+            
+            // EXTREME PRECISION: If Mac is selected, replace the UI with the Apple Logo screen
+            if(osType === 'mac') {
+                document.getElementById('boot-screen').innerHTML = `
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:60px;">
+                        <svg style="width:100px;height:100px;fill:white;"><use href="#logo-mac"></use></svg>
+                        <div style="width:200px;height:4px;background:#333;border-radius:2px;overflow:hidden;">
+                            <div id="boot-fill" style="height:100%;width:0%;background:white;transition:width 0.1s;"></div>
+                        </div>
+                    </div>`;
             }
-        } catch(e) { this.data.gpu = "Error detecting GPU"; }
-    }
-
-    // [ FEATURE 38 ] Network API Integration
-    detectNetwork() {
-        if (navigator.connection) {
-            this.data.net = `${navigator.connection.effectiveType} (${navigator.connection.downlink}Mbps)`;
-            navigator.connection.addEventListener('change', () => {
-                this.data.net = `${navigator.connection.effectiveType} (${navigator.connection.downlink}Mbps)`;
-                this.updateDOM();
-            });
+        
+            document.getElementById('sys-logo').innerHTML = `<use href="#logo-${osType === 'win' ? 'win11' : 'mac'}"></use>`;
+            const fill = document.getElementById('boot-fill');
+            let p = 0;
+            const int = setInterval(() => {
+                p += Math.random() * 12; // Realistic variable loading speed
+                if(p >= 100) {
+                    p = 100;
+                    clearInterval(int);
+                    setTimeout(() => {
+                        document.getElementById('boot-screen').style.opacity = '0';
+                        setTimeout(() => {
+                            document.getElementById('boot-screen').style.display = 'none';
+                            document.getElementById('desktop').style.display = 'block';
+                            Desktop.init();
+                            System.detectHardware();
+                        }, 1000);
+                    }, 500);
+                }
+                if(fill) fill.style.width = `${p}%`;
+            }, 150);
         }
-    }
 
-    // [ FEATURE 39 ] Battery API Integration
-    async detectBattery() {
-        if (navigator.getBattery) {
-            try {
-                const bat = await navigator.getBattery();
-                const updateBat = () => {
-                    this.data.battery = `${Math.round(bat.level * 100)}% ${bat.charging ? '⚡' : ''}`;
-                    document.getElementById('hw-bat-txt').innerText = this.data.battery;
-                };
-                updateBat();
-                bat.addEventListener('levelchange', updateBat);
-                bat.addEventListener('chargingchange', updateBat);
-            } catch(e) {}
-        }
-    }
-
-    updateDOM() {
-        document.getElementById('badge-cores').innerText = this.data.cores;
-        document.getElementById('badge-ram').innerText = this.data.ram;
-        document.getElementById('badge-os').innerText = this.data.os;
-        document.getElementById('badge-net').innerText = this.data.net;
-        document.getElementById('hw-gpu-txt').innerText = this.data.gpu;
-    }
-}
-const HW = new HardwareDetector();
-
-
-// ==========================================================================
-// [ FEATURE 40 ] UI MANAGER (Toasts, Modals, Menus)
-// ==========================================================================
-class UI {
-    static toast(msg, type='info') {
-        const c = document.getElementById('toaster');
-        const t = document.createElement('div');
-        t.className = `toast ${type}`;
-        let icon = '#i-alert';
-        if(type==='err') { icon = '#i-close'; Synth.play('error'); }
-        else if(type==='warn') icon = '#i-settings';
-        else Synth.play('success');
-
-        t.innerHTML = `<svg class="toast-icon"><use href="${icon}"></use></svg> <span>${msg}</span>`;
-        c.appendChild(t);
+    static reboot() {
+        document.getElementById('desktop').style.display = 'none';
+        const boot = document.getElementById('boot-screen');
+        boot.style.display = 'flex';
+        boot.style.opacity = '1';
+        document.getElementById('boot-loader').style.display = 'none';
+        document.getElementById('boot-fill').style.width = '0%';
         
-        requestAnimationFrame(() => t.classList.add('show'));
-        setTimeout(() => {
-            t.classList.remove('show');
-            setTimeout(() => t.remove(), 600);
-        }, 3000);
-    }
-
-    static showModal() {
-        const m = document.getElementById('sys-modal');
-        const body = document.getElementById('sys-modal-body');
-        body.innerHTML = `
-            <p><strong class="tc-pri">USER_AGENT:</strong> <span style="word-wrap:break-word;">${navigator.userAgent}</span></p>
-            <p><strong class="tc-pri">LOGICAL_CORES:</strong> ${HW.data.cores}</p>
-            <p><strong class="tc-pri">DEVICE_MEMORY:</strong> ~${HW.data.ram} GB</p>
-            <p><strong class="tc-pri">GRAPHICS_UNIT:</strong> ${HW.data.gpu}</p>
-            <p><strong class="tc-pri">NETWORK_LINK:</strong> ${HW.data.net}</p>
-            <p><strong class="tc-pri">SCREEN_RES:</strong> ${window.screen.width}x${window.screen.height}</p>
-        `;
-        
-        // [ FEATURE 41 ] Animated modal graph
-        const graph = document.getElementById('modal-graph');
-        graph.innerHTML = '';
-        for(let i=0; i<20; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'graph-bar';
-            bar.style.height = `${Math.random() * 100}%`;
-            graph.appendChild(bar);
-        }
-        
-        m.classList.add('show');
-        Synth.play('click');
-        
-        // Animate graph
-        UI.graphInterval = setInterval(() => {
-            Array.from(graph.children).forEach(bar => {
-                bar.style.height = `${Math.random() * 100}%`;
-            });
-        }, 500);
-    }
-
-    static hideModal() {
-        document.getElementById('sys-modal').classList.remove('show');
-        clearInterval(UI.graphInterval);
-        Synth.play('click');
+        // Clear all windows
+        document.querySelectorAll('.os-window').forEach(w => w.remove());
+        STATE.windows = [];
+        document.getElementById('start-menu').classList.remove('show');
     }
 
     static cycleTheme() {
-        STATE.themeIdx = (STATE.themeIdx + 1) % CONFIG.themes.length;
-        const t = CONFIG.themes[STATE.themeIdx];
-        if(t === 'default') document.documentElement.removeAttribute('data-theme');
-        else document.documentElement.setAttribute('data-theme', t);
-        UI.toast(`Theme updated to: ${t.toUpperCase()}`);
-        Synth.play('click');
+        STATE.themeIdx = (STATE.themeIdx + 1) % STATE.themes.length;
+        const t = STATE.themes[STATE.themeIdx];
+        if(t === 'default') document.body.removeAttribute('data-color');
+        else document.body.setAttribute('data-color', t);
+        System.toast(`Theme applied: ${t.toUpperCase()}`);
     }
 
-    // [ FEATURE 42 ] Context Menu Logic
-    static showCtx(e, id) {
+    static showInfo() {
+        document.getElementById('sys-overlay').classList.add('active');
+        document.getElementById('sys-modal').classList.add('show');
+        document.body.classList.add('modal-open');
+    }
+
+    static hideInfo() {
+        document.getElementById('sys-overlay').classList.remove('active');
+        document.getElementById('sys-modal').classList.remove('show');
+        document.body.classList.remove('modal-open');
+    }
+
+    static toast(msg) {
+        const c = document.getElementById('notifier');
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerHTML = `
+            <svg class="toast-icon"><use href="#logo-${STATE.os === 'win' ? 'win11' : 'mac'}"></use></svg>
+            <div class="toast-content">
+                <div class="toast-title">System Message</div>
+                <div class="toast-msg">${msg}</div>
+            </div>
+        `;
+        c.appendChild(t);
+        requestAnimationFrame(() => t.classList.add('show'));
+        setTimeout(() => {
+            t.classList.remove('show');
+            setTimeout(() => t.remove(), 500);
+        }, 3000);
+    }
+
+    static detectHardware() {
+        const cores = navigator.hardwareConcurrency || 4;
+        const ram = navigator.deviceMemory || 8;
+        const ua = navigator.userAgent;
+        let browser = "Web Engine";
+        if(ua.includes("Chrome")) browser = "Blink (Chrome)";
+        if(ua.includes("Firefox")) browser = "Gecko (Firefox)";
+        if(ua.includes("Safari") && !ua.includes("Chrome")) browser = "WebKit (Safari)";
+
+        document.getElementById('hw-details').innerHTML = `
+            <p><strong>Processor</strong> ${cores}-Core Virtual CPU</p>
+            <p><strong>Memory</strong> ${ram} GB Unified Memory</p>
+            <p><strong>Graphics</strong> Hardware Accelerated WebGL</p>
+            <p><strong>Engine</strong> ${browser}</p>
+            <p><strong>Display</strong> ${window.screen.width} x ${window.screen.height} Retina</p>
+        `;
+    }
+}
+
+// ==========================================================================
+// [ DESKTOP & UI MANAGER ]
+// ==========================================================================
+class Desktop {
+    static init() {
+        const dContainer = document.getElementById('desktop-icons-container');
+        const mDock = document.getElementById('mac-dock');
+        const wTask = document.getElementById('win-taskbar-apps');
+        const sGrid = document.getElementById('start-grid');
+
+        dContainer.innerHTML = '';
+        
+        // Clean dynamic elements
+        document.querySelectorAll('.dyn-app').forEach(e => e.remove());
+
+        APPS.forEach(app => {
+            const osIcon = STATE.os === 'mac' ? app.macIcon : app.winIcon;
+            
+            // 1. Desktop Icon
+            const dIcon = document.createElement('div');
+            dIcon.className = 'd-icon';
+            dIcon.dataset.id = app.id;
+            dIcon.innerHTML = `
+                <div class="d-icon-img"><svg width="48" height="48"><use href="#${osIcon}"></use></svg></div>
+                <div class="d-icon-text">${app.title}</div>
+            `;
+            dIcon.onclick = (e) => { e.stopPropagation(); Desktop.selectIcon(dIcon); };
+            dIcon.ondblclick = () => WindowManager.open(app);
+            // Support touch
+            let lastTouch = 0;
+            dIcon.addEventListener('touchend', (e) => {
+                const now = new Date().getTime();
+                if(now - lastTouch < 300) WindowManager.open(app);
+                else Desktop.selectIcon(dIcon);
+                lastTouch = now;
+            });
+            dContainer.appendChild(dIcon);
+
+            // 2. Mac Dock Icon
+            if(STATE.os === 'mac') {
+                const dockIcon = document.createElement('div');
+                dockIcon.className = `dock-icon dyn-app app-${app.id}`;
+                dockIcon.dataset.title = app.title;
+                dockIcon.innerHTML = `<svg width="48" height="48"><use href="#${osIcon}"></use></svg>`;
+                dockIcon.onclick = () => {
+                    dockIcon.classList.add('bouncing');
+                    setTimeout(() => dockIcon.classList.remove('bouncing'), 1000);
+                    WindowManager.open(app);
+                };
+                mDock.insertBefore(dockIcon, mDock.children[mDock.children.length-2]);
+            }
+
+            // 3. Win Taskbar Icon
+            if(STATE.os === 'win') {
+                const tbBtn = document.createElement('div');
+                tbBtn.className = `win-tb-btn dyn-app app-${app.id}`;
+                tbBtn.title = app.title;
+                tbBtn.innerHTML = `<svg><use href="#${osIcon}"></use></svg>`;
+                tbBtn.onclick = () => WindowManager.open(app);
+                wTask.appendChild(tbBtn);
+
+                // Start menu item
+                const sItem = document.createElement('div');
+                sItem.className = `start-item dyn-app`;
+                sItem.innerHTML = `<svg width="32" height="32"><use href="#${osIcon}"></use></svg><span>${app.title}</span>`;
+                sItem.onclick = () => { document.getElementById('start-menu').classList.remove('show'); WindowManager.open(app); };
+                sGrid.appendChild(sItem);
+            }
+        });
+
+        // Click desktop to deselect icons
+        document.getElementById('desktop').onclick = () => {
+            document.querySelectorAll('.d-icon').forEach(i => i.classList.remove('selected'));
+            document.getElementById('context-menu').classList.remove('show');
+            document.getElementById('start-menu').classList.remove('show');
+        };
+    }
+
+    static selectIcon(icon) {
+        document.querySelectorAll('.d-icon').forEach(i => i.classList.remove('selected'));
+        icon.classList.add('selected');
+    }
+
+    static showContext(e) {
         e.preventDefault();
-        STATE.ctxTarget = id;
-        const menu = document.getElementById('ctx-menu');
+        const menu = document.getElementById('context-menu');
+        menu.innerHTML = `
+            <div class="ctx-item" onclick="System.cycleTheme()">Change Wallpaper Theme</div>
+            <div class="ctx-item" onclick="System.showInfo()">System Properties</div>
+            <div class="ctx-divider"></div>
+            <div class="ctx-item" onclick="location.reload()">Refresh Desktop</div>
+        `;
         menu.classList.add('show');
         
         let x = e.clientX; let y = e.clientY;
@@ -908,485 +1295,277 @@ class UI {
         if(x + bounds.width > window.innerWidth) x -= bounds.width;
         if(y + bounds.height > window.innerHeight) y -= bounds.height;
         
-        menu.style.left = `${x}px`;
-        menu.style.top = `${y}px`;
-        Synth.play('click');
-    }
-
-    static hideCtx() {
-        document.getElementById('ctx-menu').classList.remove('show');
-        STATE.ctxTarget = null;
+        menu.style.left = `${x}px`; menu.style.top = `${y}px`;
     }
 }
 
-
 // ==========================================================================
-// [ FEATURE 43 ] DRAGGABLE WINDOW MANAGER (CLI Terminal)
+// [ WINDOW MANAGER ]
 // ==========================================================================
 class WindowManager {
-    constructor() {
-        this.win = document.getElementById('terminal-window');
-        this.handle = document.getElementById('term-drag');
-        this.isDragging = false;
-        this.offset = { x:0, y:0 };
-        this.pos = { x:20, y:60 }; // Init pos
-
-        this.handle.addEventListener('mousedown', this.startDrag.bind(this));
-        window.addEventListener('mousemove', this.drag.bind(this));
-        window.addEventListener('mouseup', this.stopDrag.bind(this));
-    }
-
-    startDrag(e) {
-        this.isDragging = true;
-        const rect = this.win.getBoundingClientRect();
-        this.offset.x = e.clientX - rect.left;
-        this.offset.y = e.clientY - rect.top;
-        this.win.style.transition = 'none'; // Disable transition for smooth drag
-    }
-
-    drag(e) {
-        if(!this.isDragging) return;
-        this.pos.x = e.clientX - this.offset.x;
-        this.pos.y = e.clientY - this.offset.y;
-        
-        // Bounds check
-        if(this.pos.x < 0) this.pos.x = 0;
-        if(this.pos.y < 40) this.pos.y = 40; // taskbar height
-        if(this.pos.x + this.win.offsetWidth > window.innerWidth) this.pos.x = window.innerWidth - this.win.offsetWidth;
-        if(this.pos.y + this.win.offsetHeight > window.innerHeight) this.pos.y = window.innerHeight - this.win.offsetHeight;
-
-        this.win.style.left = `${this.pos.x}px`;
-        this.win.style.top = `${this.pos.y}px`;
-        this.win.style.transform = `none`; // Override centering transform
-    }
-
-    stopDrag() {
-        this.isDragging = false;
-        this.win.style.transition = ''; // Restore transitions
-    }
-
-    toggle() {
-        this.win.classList.toggle('active');
-        if(this.win.classList.contains('active')) {
-            document.getElementById('term-input').focus();
-            Synth.play('click');
-        }
-    }
-}
-const WinMgr = new WindowManager();
-
-
-// ==========================================================================
-// [ FEATURE 44 ] ADVANCED CLI LOGIC WITH 15+ COMMANDS
-// ==========================================================================
-class CLI {
-    constructor() {
-        this.input = document.getElementById('term-input');
-        this.out = document.getElementById('term-output');
-        
-        // [ FEATURE 45 - 55 ] Extensive Command Library
-        this.cmds = {
-            'help': () => this.print("Cmds: help, clear, sys, theme, ls, kill [id], reboot, ping, sudo, matrix, date, echo"),
-            'clear': () => { this.out.innerHTML = ''; },
-            'sys': () => this.print(`OS: ULP V6<br>CPU: ${HW.data.cores} Cores<br>RAM: ~${HW.data.ram}GB<br>GPU: ${HW.data.gpu}`),
-            'theme': () => { UI.cycleTheme(); this.print("Theme mutated."); },
-            'ls': () => {
-                if(STATE.activePIDs.size === 0) return this.print("No active processes.");
-                let s = "PIDs:<br>";
-                STATE.activePIDs.forEach((url, id) => s += `<span class="tc-pri">${id}</span> -> ${url}<br>`);
-                this.print(s);
-            },
-            'kill': (args) => {
-                if(!args[0]) return this.print("Usage: kill [id] (e.g. kill SYS-001)", 'err');
-                const id = args[0].toUpperCase();
-                if(STATE.activePIDs.has(id)) {
-                    Grid.kill(id);
-                    this.print(`Process ${id} terminated.`);
-                } else this.print(`PID ${id} not found.`, 'err');
-            },
-            'reboot': () => { this.print("Rebooting..."); setTimeout(()=>location.reload(), 1000); },
-            'ping': () => this.print(`Pong. ${Math.floor(Math.random()*20+5)}ms`),
-            'sudo': () => this.print("Nice try. This incident will be reported.", 'err'),
-            'matrix': () => { document.documentElement.setAttribute('data-theme', 'matrix'); this.print("Follow the white rabbit."); },
-            'date': () => this.print(new Date().toString()),
-            'echo': (args) => this.print(args.join(' ')),
-            // Easter eggs
-            'do a barrel roll': () => { document.body.style.transition="1s"; document.body.style.transform="rotate(360deg)"; setTimeout(()=>{document.body.style.transition=""; document.body.style.transform="";}, 1000); this.print("Whoa!"); },
-            'rm -rf /': () => this.print("Permission denied. Safeguard active.", 'err')
-        };
-
-        this.input.addEventListener('keydown', e => {
-            if(e.key === 'Enter') {
-                const val = this.input.value.trim();
-                if(val) this.process(val);
-                this.input.value = '';
-            }
-        });
-    }
-
-    print(html, isErr=false) {
-        const d = document.createElement('div');
-        d.className = 'term-line';
-        if(isErr) d.classList.add('tc-err');
-        d.innerHTML = html;
-        this.out.appendChild(d);
-        this.out.scrollTop = this.out.scrollHeight;
-    }
-
-    process(raw) {
-        this.print(`<span class="tc-succ">user@sys</span><span class="tc-sec">~$</span> ${raw}`);
-        const parts = raw.split(' ');
-        const cmd = parts[0].toLowerCase();
-        const args = parts.slice(1);
-        
-        if(this.cmds[cmd]) this.cmds[cmd](args);
-        else this.print(`bash: ${cmd}: command not found`, true);
-    }
-}
-const Terminal = new CLI();
-
-
-// ==========================================================================
-// [ FEATURE 56 ] GRID MANAGER (LAZY LOAD, VIRTUALIZATION, DOM INJECTION)
-// ==========================================================================
-class GridEngine {
-    constructor() {
-        this.container = document.getElementById('main-grid');
-        this.build();
-    }
-
-    build() {
-        const frag = document.createDocumentFragment();
-        
-        NODE_DB.forEach((n, i) => {
-            const el = document.createElement('article');
-            el.className = 'node';
-            el.dataset.id = n.id;
-            el.dataset.name = n.name.toLowerCase();
-            
-            const isPh = n.url.includes('about:blank');
-            const btnCls = isPh ? 'kill' : '';
-            const btnTxt = isPh ? 'ALLOCATE' : 'INITIALIZE';
-
-            el.innerHTML = `
-                <div class="ctx-trigger" title="Options"><svg class="tb-icon"><use href="#i-more"></use></svg></div>
-                <div class="node-view">
-                    <div class="node-standby">
-                        <div class="node-icon-ring"><svg class="node-svg"><use href="#${n.icon}"></use></svg></div>
-                        <button class="btn-init ${btnCls}">${btnTxt}</button>
-                    </div>
-                    <iframe data-url="${n.url}" src="about:blank" tabindex="-1" class="node-iframe"></iframe>
-                </div>
-                <div class="node-meta">
-                    <div class="node-index">${n.id}</div>
-                    <span class="node-cat">${n.type}</span>
-                    <h2 class="node-name">${n.name}</h2>
-                    <p class="node-desc">${n.desc}</p>
-                </div>
-            `;
-            
-            // Interaction bindings
-            el.addEventListener('mouseenter', () => Synth.play('hover'));
-            
-            const initBtn = el.querySelector('.btn-init');
-            initBtn.addEventListener('click', () => this.toggle(n.id, el));
-            
-            const ctxBtn = el.querySelector('.ctx-trigger');
-            ctxBtn.addEventListener('click', (e) => { e.stopPropagation(); UI.showCtx(e, n.id); });
-            el.addEventListener('contextmenu', (e) => { e.preventDefault(); UI.showCtx(e, n.id); });
-
-            frag.appendChild(el);
-        });
-
-        this.container.appendChild(frag);
-        
-        // [ FEATURE 57 ] Intersection Observer to save paint cycles
-        const io = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if(e.isIntersecting) e.target.classList.add('revealed');
-            });
-        }, { rootMargin: '100px' });
-        
-        document.querySelectorAll('.node').forEach(n => io.observe(n));
-    }
-
-    // [ FEATURE 58 ] RAM Governor Logic
-    toggle(id, el) {
-        const node = NODE_DB.find(n => n.id === id);
-        if(node.url.includes('about:blank')) {
-            UI.toast('Memory sector unallocated. Bypass required.', 'err');
+    static open(app) {
+        // Check if already open
+        let winEl = document.getElementById(`win-${app.id}`);
+        if(winEl) {
+            if(winEl.classList.contains('minimized')) this.restore(winEl);
+            this.focus(winEl);
             return;
         }
 
-        const iframe = el.querySelector('.node-iframe');
-        const isActive = el.classList.contains('is-running');
+        // Update taskbar/dock indicators
+        document.querySelectorAll(`.app-${app.id}`).forEach(el => el.classList.add('running'));
 
-        if(!isActive) {
-            if(STATE.activePIDs.size >= CONFIG.maxRamIframes) {
-                UI.toast(`RAM GOVERNOR: Max limit (${CONFIG.maxRamIframes}) reached. Kill a process.`, 'err');
-                return;
-            }
+        winEl = document.createElement('div');
+        winEl.className = 'os-window';
+        winEl.id = `win-${app.id}`;
+        
+        // Random initial position offset
+        const offset = Math.floor(Math.random() * 40);
+        winEl.style.width = '800px';
+        winEl.style.height = '500px';
+        winEl.style.top = `${100 + offset}px`;
+        winEl.style.left = `${100 + offset}px`;
+        winEl.style.zIndex = ++STATE.zIndexCounter;
+
+        winEl.innerHTML = `
+            <div class="win-header">
+                <div class="mac-controls">
+                    <div class="mac-btn mac-close" onclick="WindowManager.close('${app.id}')"></div>
+                    <div class="mac-btn mac-min" onclick="WindowManager.minimize('${app.id}')"></div>
+                    <div class="mac-btn mac-max" onclick="WindowManager.maximize('${app.id}')"></div>
+                </div>
+                <div class="win-title">${STATE.os==='win' ? `<svg width="14" height="14"><use href="#${app.winIcon}"></use></svg>` : ''} ${app.title}</div>
+                <div class="win-controls">
+                    <div class="win-btn" onclick="WindowManager.minimize('${app.id}')"><svg><use href="#ui-min"></use></svg></div>
+                    <div class="win-btn" onclick="WindowManager.maximize('${app.id}')"><svg><use href="#ui-max"></use></svg></div>
+                    <div class="win-btn win-close" onclick="WindowManager.close('${app.id}')"><svg><use href="#ui-close"></use></svg></div>
+                </div>
+            </div>
+            <div class="win-content">
+                <iframe src="${app.url}" class="win-iframe"></iframe>
+            </div>
+            <div class="resize-handle rs-n" data-dir="n"></div>
+            <div class="resize-handle rs-s" data-dir="s"></div>
+            <div class="resize-handle rs-e" data-dir="e"></div>
+            <div class="resize-handle rs-w" data-dir="w"></div>
+            <div class="resize-handle rs-nw" data-dir="nw"></div>
+            <div class="resize-handle rs-ne" data-dir="ne"></div>
+            <div class="resize-handle rs-sw" data-dir="sw"></div>
+            <div class="resize-handle rs-se" data-dir="se"></div>
+        `;
+
+        document.getElementById('desktop').appendChild(winEl);
+        
+        // Animate in
+        requestAnimationFrame(() => {
+            winEl.classList.add('opened');
+            this.focus(winEl);
+        });
+
+        // Event Listeners
+        winEl.addEventListener('mousedown', () => this.focus(winEl));
+        this.makeDraggable(winEl);
+        this.makeResizable(winEl);
+        STATE.windows.push(winEl);
+    }
+
+    static close(appId) {
+        const win = document.getElementById(`win-${appId}`);
+        if(win) {
+            // Free memory instantly
+            win.querySelector('iframe').src = 'about:blank';
+            win.classList.remove('opened');
+            setTimeout(() => win.remove(), 200);
+            STATE.windows = STATE.windows.filter(w => w.id !== `win-${appId}`);
             
-            el.classList.add('is-running');
-            iframe.src = node.url;
-            STATE.activePIDs.set(id, node.url);
-            
-            setTimeout(() => iframe.classList.add('loaded'), 500);
-            UI.toast(`Process ${id} mounted successfully.`);
-            Synth.play('success');
-            
-        } else {
-            this.kill(id, el);
+            // Remove indicators
+            document.querySelectorAll(`.app-${appId}`).forEach(el => el.classList.remove('running', 'active'));
         }
     }
 
-    kill(id, el=null) {
-        if(!el) el = document.querySelector(`.node[data-id="${id}"]`);
-        if(!el) return;
-        
-        const iframe = el.querySelector('.node-iframe');
-        iframe.classList.remove('loaded');
-        el.classList.remove('is-running');
-        STATE.activePIDs.delete(id);
-        
-        // Delay src removal for smooth fade out
-        setTimeout(() => {
-            iframe.src = 'about:blank';
-            UI.toast(`Process ${id} killed. Memory freed.`);
-        }, 300);
+    static minimize(appId) {
+        const win = document.getElementById(`win-${appId}`);
+        if(win) {
+            win.classList.add('minimized');
+            document.querySelectorAll(`.app-${appId}`).forEach(el => el.classList.remove('active'));
+        }
     }
 
-    filter(q) {
-        const query = q.toLowerCase();
-        document.querySelectorAll('.node').forEach(el => {
-            if(el.dataset.name.includes(query) || el.dataset.id.toLowerCase().includes(query)) {
-                el.style.display = 'flex';
+    static restore(win) {
+        win.classList.remove('minimized');
+        const appId = win.id.replace('win-', '');
+        document.querySelectorAll(`.app-${appId}`).forEach(el => el.classList.add('active'));
+    }
+
+    static maximize(appId) {
+        const win = document.getElementById(`win-${appId}`);
+        if(win) {
+            if(win.classList.contains('maximized')) {
+                win.classList.remove('maximized');
+                win.style.width = win.dataset.ow;
+                win.style.height = win.dataset.oh;
+                win.style.top = win.dataset.ot;
+                win.style.left = win.dataset.ol;
             } else {
-                el.style.display = 'none';
+                // Save original bounds
+                win.dataset.ow = win.style.width;
+                win.dataset.oh = win.style.height;
+                win.dataset.ot = win.style.top;
+                win.dataset.ol = win.style.left;
+                
+                win.classList.add('maximized');
+                
+                let topOffset = STATE.os === 'mac' ? 24 : 0;
+                let bottomOffset = STATE.os === 'win' ? 48 : 0;
+                
+                win.style.top = `${topOffset}px`;
+                win.style.left = '0px';
+                win.style.width = '100vw';
+                win.style.height = `calc(100vh - ${topOffset + bottomOffset}px)`;
+            }
+        }
+    }
+
+    static focus(win) {
+        STATE.windows.forEach(w => w.classList.remove('focused'));
+        win.classList.add('focused');
+        win.style.zIndex = ++STATE.zIndexCounter;
+        
+        // Update taskbar active state
+        const appId = win.id.replace('win-', '');
+        document.querySelectorAll('.dyn-app').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll(`.app-${appId}`).forEach(el => el.classList.add('active'));
+    }
+
+    static makeDraggable(win) {
+        const header = win.querySelector('.win-header');
+        let isDragging = false, startX, startY, startLeft, startTop;
+
+        header.addEventListener('mousedown', e => {
+            if(e.target.closest('.mac-controls') || e.target.closest('.win-controls')) return;
+            if(win.classList.contains('maximized')) return;
+            
+            isDragging = true;
+            startX = e.clientX; startY = e.clientY;
+            startLeft = parseInt(window.getComputedStyle(win).left, 10);
+            startTop = parseInt(window.getComputedStyle(win).top, 10);
+            win.style.transition = 'none'; // Disable transition for smooth drag
+            
+            // Create a glass pane over iframe so mouse doesn't get captured by it
+            const glass = document.createElement('div');
+            glass.className = 'iframe-glass';
+            glass.style.cssText = 'position:absolute;inset:0;z-index:999;';
+            win.querySelector('.win-content').appendChild(glass);
+        });
+
+        window.addEventListener('mousemove', e => {
+            if(!isDragging) return;
+            let nx = startLeft + (e.clientX - startX);
+            let ny = startTop + (e.clientY - startY);
+            
+            // Boundaries
+            if(ny < (STATE.os==='mac'?24:0)) ny = STATE.os==='mac'?24:0;
+            
+            win.style.left = `${nx}px`;
+            win.style.top = `${ny}px`;
+        });
+
+        window.addEventListener('mouseup', () => {
+            if(isDragging) {
+                isDragging = false;
+                win.style.transition = 'opacity 0.2s, transform 0.2s';
+                const glass = win.querySelector('.iframe-glass');
+                if(glass) glass.remove();
+            }
+        });
+    }
+
+    static makeResizable(win) {
+        const handles = win.querySelectorAll('.resize-handle');
+        let isResizing = false, currentHandle, startX, startY, startW, startH, startL, startT;
+
+        handles.forEach(h => {
+            h.addEventListener('mousedown', e => {
+                if(win.classList.contains('maximized')) return;
+                isResizing = true;
+                currentHandle = h.dataset.dir;
+                startX = e.clientX; startY = e.clientY;
+                const rect = win.getBoundingClientRect();
+                startW = rect.width; startH = rect.height;
+                startL = rect.left; startT = rect.top;
+                win.style.transition = 'none';
+                
+                const glass = document.createElement('div');
+                glass.className = 'iframe-glass';
+                glass.style.cssText = 'position:absolute;inset:0;z-index:999;cursor:'+h.style.cursor+';';
+                win.querySelector('.win-content').appendChild(glass);
+            });
+        });
+
+        window.addEventListener('mousemove', e => {
+            if(!isResizing) return;
+            let dx = e.clientX - startX;
+            let dy = e.clientY - startY;
+            let nw = startW, nh = startH, nl = startL, nt = startT;
+
+            if(currentHandle.includes('e')) nw = startW + dx;
+            if(currentHandle.includes('w')) { nw = startW - dx; nl = startL + dx; }
+            if(currentHandle.includes('s')) nh = startH + dy;
+            if(currentHandle.includes('n')) { nh = startH - dy; nt = startT + dy; }
+
+            // Min sizes
+            if(nw > 300) { win.style.width = `${nw}px`; win.style.left = `${nl}px`; }
+            if(nh > 200) { win.style.height = `${nh}px`; win.style.top = `${nt}px`; }
+        });
+
+        window.addEventListener('mouseup', () => {
+            if(isResizing) {
+                isResizing = false;
+                win.style.transition = 'opacity 0.2s, transform 0.2s';
+                const glass = win.querySelector('.iframe-glass');
+                if(glass) glass.remove();
             }
         });
     }
 }
-const Grid = new GridEngine();
-
 
 // ==========================================================================
-// [ FEATURE 59 ] REAL-TIME TELEMETRY MONITOR (CPU/RAM Simulation based on load)
+// [ UTILITIES & INITIALIZATION ]
 // ==========================================================================
-function updateTelemetry() {
-    // Math based on active nodes
-    const active = STATE.activePIDs.size;
-    const max = CONFIG.maxRamIframes;
-    
-    // Base load + per node load + random jitter
-    const cpuLoad = Math.min(100, STATE.cpuBase + (active * 20) + (Math.random() * 8));
-    const ramLoad = Math.min(100, 15 + (active * (85/max)) + (Math.random() * 2));
-    
-    document.getElementById('hw-cpu-txt').innerText = `${Math.floor(cpuLoad)}%`;
-    document.getElementById('hw-cpu-fill').style.width = `${cpuLoad}%`;
-    document.getElementById('hw-cpu-fill').className = `gauge-fill ${cpuLoad>80?'crit':cpuLoad>50?'warn':''}`;
-    
-    document.getElementById('hw-ram-txt').innerText = `${Math.floor(ramLoad)}%`;
-    document.getElementById('hw-ram-fill').style.width = `${ramLoad}%`;
-    document.getElementById('hw-ram-fill').className = `gauge-fill ${ramLoad>80?'crit':ramLoad>50?'warn':''}`;
-}
-setInterval(updateTelemetry, 1000);
 
-// Clock
+// Custom Cursor Logic
+document.addEventListener('mousemove', e => {
+    const cur = document.getElementById('cursor-pointer');
+    cur.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+});
+
+document.addEventListener('mouseover', e => {
+    const t = e.target.tagName.toLowerCase();
+    if(t === 'button' || t === 'a' || e.target.closest('.interactive') || e.target.closest('.d-icon') || e.target.closest('.dock-icon') || e.target.closest('.win-tb-btn') || e.target.closest('.mac-menu-item') || e.target.closest('.mac-btn') || e.target.closest('.win-btn') || e.target.closest('.start-item') || e.target.closest('.ctx-item')) {
+        document.body.classList.add('cursor-pointer');
+    } else {
+        document.body.classList.remove('cursor-pointer');
+    }
+    
+    if(t === 'input' || t === 'textarea') document.body.classList.add('cursor-text');
+    else document.body.classList.remove('cursor-text');
+});
+
+// Clocks
 setInterval(() => {
-    document.getElementById('sys-clock').innerText = new Date().toLocaleTimeString('en-US', {hour12:false});
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', {hour: 'numeric', minute:'2-digit'});
+    const dayStr = now.toLocaleDateString('en-US', {weekday: 'short'});
+    const dateStr = now.toLocaleDateString('en-US');
+    
+    document.getElementById('mac-clock').innerText = `${dayStr} ${timeStr}`;
+    document.getElementById('win-time').innerText = timeStr;
+    document.getElementById('win-date').innerText = dateStr;
 }, 1000);
 
+// Fallback init (in case user wants to test quickly without UI)
+// System.boot('mac'); 
 
-// ==========================================================================
-// [ FEATURE 60 ] LOW-IMPACT CANVAS PARTICLE ENGINE
-// ==========================================================================
-class ParticleSystem {
-    constructor() {
-        this.c = document.getElementById('ambient-canvas');
-        this.ctx = this.c.getContext('2d', { alpha: false }); // Optimize
-        this.particles = [];
-        this.resize();
-        window.addEventListener('resize', () => this.resize());
-        
-        for(let i=0; i<40; i++) {
-            this.particles.push({
-                x: Math.random() * this.w,
-                y: Math.random() * this.h,
-                vx: (Math.random() - 0.5) * 0.5,
-                vy: (Math.random() - 0.5) * 0.5,
-                s: Math.random() * 2 + 1
-            });
-        }
-        this.animate();
-    }
-    resize() {
-        this.w = this.c.width = window.innerWidth;
-        this.h = this.c.height = window.innerHeight;
-    }
-    animate() {
-        // Clear with slight trail
-        this.ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-core').trim();
-        this.ctx.fillRect(0, 0, this.w, this.h);
-        
-        const priColor = getComputedStyle(document.body).getPropertyValue('--color-primary').trim();
-        this.ctx.fillStyle = priColor;
-        
-        this.particles.forEach(p => {
-            p.x += p.vx; p.y += p.vy;
-            if(p.x < 0 || p.x > this.w) p.vx *= -1;
-            if(p.y < 0 || p.y > this.h) p.vy *= -1;
-            
-            // Repel from mouse
-            const dx = STATE.mouse.x - p.x;
-            const dy = STATE.mouse.y - p.y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-            if(dist < 100) {
-                p.x -= (dx/dist) * 2;
-                p.y -= (dy/dist) * 2;
-            }
-            
-            this.ctx.globalAlpha = 0.5;
-            this.ctx.beginPath();
-            this.ctx.arc(p.x, p.y, p.s, 0, Math.PI*2);
-            this.ctx.fill();
-        });
-        requestAnimationFrame(() => this.animate());
-    }
-}
-// Init after short delay to prioritize UI load
-setTimeout(() => new ParticleSystem(), 1000);
-
-
-// ==========================================================================
-// [ FEATURE 61 - 67 ] GLOBAL EVENTS, CURSOR PHYSICS & EASTER EGGS
-// ==========================================================================
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // Hardware Cursor Physics
-    const dot = document.getElementById('cursor-dot');
-    const ring = document.getElementById('cursor-ring');
-    let rx = window.innerWidth/2, ry = window.innerHeight/2;
-    
-    window.addEventListener('mousemove', e => {
-        STATE.mouse.x = e.clientX;
-        STATE.mouse.y = e.clientY;
-        dot.style.left = `${e.clientX}px`;
-        dot.style.top = `${e.clientY}px`;
-    });
-
-    function animCursor() {
-        rx += (STATE.mouse.x - rx) * 0.2;
-        ry += (STATE.mouse.y - ry) * 0.2;
-        ring.style.left = `${rx}px`;
-        ring.style.top = `${ry}px`;
-        requestAnimationFrame(animCursor);
-    }
-    animCursor();
-
-    // Hover states for custom cursor
-    document.querySelectorAll('button, .interactive, .ctx-trigger, .ctx-item, input').forEach(el => {
-        el.addEventListener('mouseenter', () => document.body.classList.add(el.tagName==='INPUT'?'typing':'hovering'));
-        el.addEventListener('mouseleave', () => document.body.classList.remove('hovering', 'typing'));
-    });
-
-    // Toolbar logic
-    document.getElementById('btn-cli').addEventListener('click', () => WinMgr.toggle());
-    document.getElementById('btn-close-cli').addEventListener('click', () => WinMgr.toggle());
-    document.getElementById('btn-info').addEventListener('click', () => UI.showModal());
-    document.getElementById('btn-close-modal').addEventListener('click', () => UI.hideModal());
-    document.getElementById('theme-toggle').addEventListener('click', () => UI.cycleTheme());
-    document.getElementById('btn-reboot').addEventListener('click', () => {
-        UI.toast('Rebooting kernel...', 'warn');
-        setTimeout(()=>location.reload(), 500);
-    });
-
-    // View toggles
-    const vGrid = document.getElementById('view-grid');
-    const vList = document.getElementById('view-list');
-    const mainGrid = document.getElementById('main-grid');
-    
-    vGrid.addEventListener('click', () => { vGrid.classList.add('active'); vList.classList.remove('active'); mainGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(360px, 1fr))'; Synth.play('click'); });
-    vList.addEventListener('click', () => { vList.classList.add('active'); vGrid.classList.remove('active'); mainGrid.style.gridTemplateColumns = '1fr'; Synth.play('click'); });
-
-    // Search
-    let searchTimer;
-    document.getElementById('node-search').addEventListener('input', e => {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => Grid.filter(e.target.value), 200);
-    });
-
-    // Context Menu Actions
-    document.addEventListener('click', () => UI.hideCtx());
-    
-    document.getElementById('ctx-new-tab').addEventListener('click', () => {
-        if(!STATE.ctxTarget) return;
-        const n = NODE_DB.find(x => x.id === STATE.ctxTarget);
-        if(n && !n.url.includes('about:blank')) window.open(n.url, '_blank');
-        else UI.toast('Sector void.', 'err');
-    });
-    
-    document.getElementById('ctx-copy').addEventListener('click', () => {
-        if(!STATE.ctxTarget) return;
-        const n = NODE_DB.find(x => x.id === STATE.ctxTarget);
-        navigator.clipboard.writeText(n.url);
-        UI.toast('URL Copied.');
-    });
-    
-    document.getElementById('ctx-details').addEventListener('click', () => {
-        if(!STATE.ctxTarget) return;
-        Terminal.process(`ls | grep ${STATE.ctxTarget}`);
-        if(!document.getElementById('terminal-window').classList.contains('active')) WinMgr.toggle();
-    });
-
-    document.getElementById('ctx-kill').addEventListener('click', () => {
-        if(!STATE.ctxTarget) return;
-        if(STATE.activePIDs.has(STATE.ctxTarget)) Grid.kill(STATE.ctxTarget);
-        else UI.toast('Process not running.', 'warn');
-    });
-
-    // Easter Egg: Konami Code
-    const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-    window.addEventListener('keydown', e => {
-        if(e.key === konami[STATE.konamiProgress]) {
-            STATE.konamiProgress++;
-            if(STATE.konamiProgress === konami.length) {
-                UI.toast('GOD MODE UNLOCKED. RAM GOVERNOR DISABLED.', 'warn');
-                CONFIG.maxRamIframes = 999;
-                STATE.konamiProgress = 0;
-            }
-        } else { STATE.konamiProgress = 0; }
-    });
-
-    // Easter Egg: Secret Typing
-    let typeBuffer = '';
-    window.addEventListener('keypress', e => {
-        if(e.target.tagName === 'INPUT') return;
-        typeBuffer += e.key.toLowerCase();
-        if(typeBuffer.length > 4) typeBuffer = typeBuffer.slice(-4);
-        if(typeBuffer === 'jaap') {
-            document.body.style.filter = 'hue-rotate(180deg) invert(1)';
-            setTimeout(() => document.body.style.filter = '', 2000);
-            UI.toast('Creator recognized.');
-        }
-    });
-
-    // Easter Egg: Title Overclock
-    let titleClicks = 0;
-    document.querySelector('.glitch-box').addEventListener('click', () => {
-        titleClicks++;
-        if(titleClicks > 4) {
-            document.querySelector('.hero-title').style.animationDuration = '0.1s';
-            STATE.cpuBase = 80; // Fake CPU spike
-            UI.toast('OVERCLOCK ENGAGED.', 'err');
-            setTimeout(() => {
-                document.querySelector('.hero-title').style.animationDuration = '';
-                STATE.cpuBase = 5;
-                titleClicks = 0;
-            }, 3000);
-        }
-    });
-});
 </script>
 </body>
 </html>
